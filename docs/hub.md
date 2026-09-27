@@ -413,6 +413,7 @@ The camera module ([`laika/camera/`](../backend/laika/camera/)) posts detections
 `BARK_EVENT`) are stored with their confidence and appear in `/summary.camera`.
 
 ### 8.3 Hardware (not connected yet)
+The physical design (body, nodes, sensors, safety) is in [hardware.md](hardware.md).
 The sensors only need to produce the input JSON in section 5. For example, a microcontroller reads the N4 load cell
 and sends `{"type":"pull","node":"N4","force":5.1,"duration_ms":600}` over USB serial, and a small bridge script posts
 it to `/input`. The hardware then carries out each item in `actions` (motor, spout, ear servos, LEDs, speaker), and

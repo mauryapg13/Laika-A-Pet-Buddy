@@ -1,10 +1,15 @@
 # Laika: A Pet Buddy
 
-A wall hub that lets a dog **ask** for things (a walk, play, rest, a treat) by pulling, booping and pressing.
+A wall-mounted hub that lets a dog **ask** for things (a walk, play, rest, a treat) by pulling a strap, booping a
+pad or pressing a button. The hub answers with a treat, a rolled ball, a released harness or a wave of its ears.
 A camera watches over the dog, and every evening the dog "writes" a diary about its day.
 
-Laika has three parts:
+![The hub in use: notice, pull, response, reward](docs/images/04_tug_treat_reward.jpeg)
 
+Laika is a physical device plus the software that runs it:
+
+- **The hub** is a soft, wall-mounted body with a central boop pad, two expressive ears, a camera, microphone and
+  speaker, and five modular nodes for straps, buttons and a treat/ball spout. See [Hardware](#hardware).
 - **The hub brain** (`laika.hub`) turns every pull, boop and button press into safe, predictable outcomes.
   Harder pulls never win. Treats are capped and sensor-confirmed, and the harness is only released after the
   owner says yes.
@@ -13,11 +18,40 @@ Laika has three parts:
 - **The diary** (`laika.diary`) uses Claude to turn the day's camera footage and hub events into a short, warm diary
   entry in the dog's voice. It may only mention things that actually happened. The owner also gets a separate,
   factual report.
-
-The owner uses a mobile-first web app (`web/`) with a dashboard, live camera, diary, notifications and safety
-controls.
+- **The web app** (`web/`) is mobile-first: dashboard, live camera, diary, notifications and safety controls.
 
 ![The web app: home dashboard, live diary and camera view](docs/images/app-screens.jpg)
+
+## Hardware
+
+The hub mounts on the wall. A rear chassis carries every pull into a structural wall plate, so the soft front shell
+never takes the load.
+
+| Part | What it does |
+|---|---|
+| **Boop pad** (centre) | Pressure-sensing pad with a light halo. One boop asks for a walk. |
+| **Ears** | Slow, torque-limited gestures: *available*, *success*, *hello*. They stop if obstructed. |
+| **Camera, mic, speaker** | See and hear the dog. The speaker plays quiet cues and calm music. |
+| **N1** (upper left) | Owner's **Yes** button: confirms a walk or a choice, or cues tidying. |
+| **N2** (upper right) | Dog-pressed button for calm audio. |
+| **N3** (left) | Ball pocket: drop the ball in, and it comes back out of N5. |
+| **N4** (lower right) | **Resistance node**: a motorised strap with a load sensor for tug, the harness, or choice tokens. |
+| **N5** (lower left) | **Output spout**: drops one treat or rolls the ball, with a sensor that confirms it happened. |
+
+Attachments are swappable cartridges that identify themselves (type, revision, safety class, calibration).
+
+Safety is built into the hardware, not only the software:
+- slip protection that works with the power off;
+- retraction that stops on unexpected tension;
+- no pinch points;
+- washable food parts kept separate from the electronics;
+- a watchdog that stops the motors if control fails.
+
+The hardware talks to the software through JSON. Sensors post inputs such as
+`{"type":"pull","node":"N4","force":5.1,"duration_ms":600}`, and carry out the `actions` the hub returns
+(`dispense_treat`, `retract_strap`, `ear_wave`…).
+
+Full details: [docs/hardware.md](docs/hardware.md).
 
 ## Installation
 
@@ -104,6 +138,7 @@ data/videos/             camera zone files for the test clips
 
 ### Documentation
 
+- [Hardware](docs/hardware.md): body, boop pad, ears, the five nodes, sensors and actuators, safety, and how it talks to the software.
 - [Hub reference](docs/hub.md): nodes and buttons, the 6 features, safety rules, JSON inputs and outputs, HTTP API.
 - [Camera, diary and back end](docs/camera-and-diary.md): camera behaviours, how the diary stays honest, live mode
   and batch runs.
@@ -117,7 +152,8 @@ Found a bug or have a question? [Open an issue](https://github.com/mauryapg13/La
 
 ## Roadmap
 
-- Connect the real hub hardware. It sends the same JSON inputs; see [hub.md §8.3](docs/hub.md#83-hardware-not-connected-yet).
+- Connect the hardware prototype through a sensor bridge that posts the same JSON inputs; see
+  [hardware.md §4](docs/hardware.md#4-how-the-hardware-talks-to-the-software).
 - Align the web app's node setup screen with the hub's fixed nodes, then make it live.
 - Wire Insights to `GET /summary`, and add bark detection for Voice tracking.
 - Keep hub state across restarts. It is in memory today, so each restart starts a fresh day.
@@ -148,5 +184,5 @@ separately licensed under AGPL-3.0.
 
 ## Project status
 
-Working prototype. The software runs end to end, but the hardware is not connected yet, and several web app
-screens still use mock data.
+Working prototype. The software runs end to end, and the hardware prototype is being built and tested. The two
+aren't connected yet (the software uses simulated sensors), and several web app screens still use mock data.
