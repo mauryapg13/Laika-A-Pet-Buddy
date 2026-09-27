@@ -1,6 +1,6 @@
 """Live demo: webcam -> behaviour tracking + the Laika hub -> a diary that writes itself as things happen.
 
-    python -m diary.live --name Biscuit              # laptop camera
+    python -m diary.live --name Pablo              # laptop camera
     python -m diary.live --source data/videos/x.mp4  # replay a file at real speed (loops)
 
 Open http://localhost:8765. A real device_model.Hub runs in-process: the camera feeds it HUMAN_DETECTED
@@ -504,7 +504,7 @@ def main():
     ap = argparse.ArgumentParser(prog="python -m diary.live", description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--source", default="0", help="camera index (0 = built-in) or a video file to replay")
-    ap.add_argument("--name", default="Biscuit")
+    ap.add_argument("--name", default="Pablo")
     ap.add_argument("--breed", default="good dog of unknown origin")
     ap.add_argument("--zones", help="zones JSON for this camera view (optional)")
     ap.add_argument("--sample-fps", type=float, default=3.0)

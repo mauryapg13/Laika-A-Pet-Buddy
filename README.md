@@ -552,7 +552,7 @@ mkdir -p models && curl -L -o models/yolo11n.onnx \
 
 ### 12.2 Live demo (laptop camera)
 ```bash
-python -m diary.live --name Biscuit          # open http://localhost:8765
+python -m diary.live --name Pablo          # open http://localhost:8765
 ```
 - A real `Hub` runs in-process. The page's **Owner** buttons (offer tug / walk / ball / choice, N1, park) and
   **Dog** buttons (pull strap, let go, boop, ball in pocket, toy in basket, choice ropes, music) send the same JSON
@@ -569,7 +569,7 @@ python -m diary.live --name Biscuit          # open http://localhost:8765
 ### 12.3 Whole-day batch run
 ```bash
 python -m camera.synth_video data/videos/synthetic_day.mp4           # cartoon test day with known ground truth
-python -m diary data/videos/synthetic_day.mp4 --name Biscuit --time-scale 280 --persona foodie
+python -m diary data/videos/synthetic_day.mp4 --name Pablo --time-scale 280 --persona foodie
 ```
 - Hub events come from `--hub-events events.json` (a list, e.g. saved from `GET /events`), from `--hub-url
   http://localhost:5000` (a running `python -m api.server`), or, by default, from a real `Hub` driven through a

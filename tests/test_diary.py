@@ -68,10 +68,10 @@ def test_owner_report_and_offline_diary_build():
     hub = simulate_hub_day(DAY, [], persona="foodie")
     counts = hub_stats(hub, "2026-09-27")
     timeline = build_timeline([], hub.events, DAY)
-    md = owner_report.build({"name": "Biscuit"}, "2026-09-27", timeline, {"seconds_by_state": {}}, counts, [],
+    md = owner_report.build({"name": "Pablo"}, "2026-09-27", timeline, {"seconds_by_state": {}}, counts, [],
                             "x.mp4", 60, 1, synthetic_hub=True)
     assert "## Laika hub" in md and f"| Treats (sensor-confirmed) | {counts['treats_confirmed']} / 8 |" in md
-    assert offline_diary({"name": "Biscuit"}, "2026-09-27", {}, counts).rstrip().endswith("Biscuit 🐾")
+    assert offline_diary({"name": "Pablo"}, "2026-09-27", {}, counts).rstrip().endswith("Pablo 🐾")
 
 
 def test_people_are_never_the_dog():

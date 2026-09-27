@@ -1,6 +1,6 @@
 """Laika camera + diary: camera footage + the Laika hub's event log -> the dog's diary and the owner's report.
 
-    python -m diary data/videos/synthetic_day.mp4 --name Biscuit --breed "beagle mix" \
+    python -m diary data/videos/synthetic_day.mp4 --name Pablo --breed "beagle mix" \
         --start 07:00 --time-scale 280 --persona foodie
 
 Hub events come from --hub-events (a JSON list, e.g. saved from GET /events), --hub-url (a running
@@ -70,7 +70,7 @@ figure img{{width:100%;display:block}} figcaption{{padding:8px;font-size:.8rem;c
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="python -m diary", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("video")
-    ap.add_argument("--name", default="Biscuit")
+    ap.add_argument("--name", default="Pablo")
     ap.add_argument("--breed", default="good dog of unknown origin")
     ap.add_argument("--age", default="3")
     ap.add_argument("--quirks", default="", help="free text the report can riff on, e.g. 'afraid of the vacuum'")
