@@ -1,4 +1,6 @@
-"""Tiny HTTP API so the web app can talk to the device model (JSON only).
+"""Run from the project root:  python -m api.server
+
+Tiny HTTP API so the web app can talk to the device model (JSON only).
 
     POST /input     body: one input object or a list of them -> output JSON (list if a list was sent)
     GET  /state     current device state
@@ -10,8 +12,8 @@ import threading
 
 from flask import Flask, jsonify, request
 
-from .config import CHOICES, LIMITS, NODES
-from .hub import Hub
+from device_model import Hub
+from device_model.config import CHOICES, LIMITS, NODES
 
 
 def create_app(hub: Hub = None) -> Flask:
@@ -62,5 +64,5 @@ def create_app(hub: Hub = None) -> Flask:
 
 
 if __name__ == "__main__":
-    print("PawHub device model API on http://0.0.0.0:5000  (POST /input, GET /state, /summary, /events, /layout)")
+    print("Laika device model API on http://0.0.0.0:5000  (POST /input, GET /state, /summary, /events, /layout)")
     create_app().run(host="0.0.0.0", port=5000, threaded=True)

@@ -1,14 +1,17 @@
 """Runs the 6 image stories through the device model and prints what the hub does.
 
-    python demo.py            # readable story log
-    python demo.py --json     # also print the full JSON output of every step
-Every step's full JSON is saved to demo_output.json (sample data for the web app).
+    python -m demo.run_demo          # readable story log
+    python -m demo.run_demo --json   # also print the full JSON output of every step
+Every step's full JSON is saved to demo/demo_output.json (sample data for the web app).
 """
 import json
+import os
 import sys
 from datetime import datetime, timedelta
 
-from pawhub import Hub
+from device_model import Hub
+
+OUT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "demo_output.json")
 
 STORIES = [
     ("1. My Choice (Learn / Choose / Confirm / Go)", [
@@ -98,9 +101,9 @@ def main():
     summary = hub.summary()
     print(json.dumps(summary["counts"], indent=2))
     print(f"ML pull threshold learned: {hub.threshold.value} N")
-    with open("demo_output.json", "w") as f:
+    with open(OUT_FILE, "w") as f:
         json.dump({"steps": log, "summary": summary}, f, indent=2)
-    print("Full JSON of every step saved to demo_output.json")
+    print("Full JSON of every step saved to demo/demo_output.json")
 
 
 if __name__ == "__main__":

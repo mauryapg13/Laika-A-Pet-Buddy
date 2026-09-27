@@ -1,10 +1,11 @@
-"""Renders a ~35 s explainer video of the device model: python make_video.py -> demo_video.mp4
+"""Renders a ~36 s explainer video of the device model:  python -m demo.make_video  -> demo/demo_video.mp4
 
 Left: the hub (button states, ears, halo light, treat/ball drops). Right: input JSON and the model's output.
 Uses the real model outputs from the same stories as demo.py.
 """
 import json
 import math
+import os
 from datetime import datetime, timedelta
 
 import imageio.v2 as imageio
@@ -13,9 +14,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Ellipse, FancyBboxPatch
 
-from demo import STORIES
-from pawhub import Hub
+from demo.run_demo import STORIES
+from device_model import Hub
 
+VIDEO_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "demo_video.mp4")
 FPS, HOLD_S, W, H, DPI = 12, 1.45, 12.8, 7.2, 100
 KEY_STEPS = {  # steps shown in the video (others still run so state stays correct)
     "Dog pulls the blue rope (OUTSIDE)", "Dog also tugs the yellow ring", "Owner presses N1 (Yes)",
@@ -178,8 +180,8 @@ def title_card(writer, text, sub, seconds):
 
 def main():
     shots = collect()
-    writer = imageio.get_writer("demo_video.mp4", fps=FPS, codec="libx264", quality=8, macro_block_size=8)
-    title_card(writer, "PawHub device model", "Every event goes in as JSON  →  the model returns the hub's full state as JSON", 2.5)
+    writer = imageio.get_writer(VIDEO_FILE, fps=FPS, codec="libx264", quality=8, macro_block_size=8)
+    title_card(writer, "Laika device model", "Every event goes in as JSON  →  the model returns the hub's full state as JSON", 2.5)
     n = int(HOLD_S * FPS)
     for title, label, msg, out in shots:
         for f in range(n):
@@ -190,7 +192,7 @@ def main():
             writer.append_data(render(fig)); plt.close(fig)
     title_card(writer, "Harder pulls never win.", "Treats only count when confirmed  ·  harness needs the owner  ·  frantic pulls → lockout", 2.5)
     writer.close()
-    print(f"demo_video.mp4 written: {len(shots)} steps, ~{2.5 * 2 + len(shots) * HOLD_S:.0f} s")
+    print(f"demo/demo_video.mp4 written: {len(shots)} steps, ~{2.5 * 2 + len(shots) * HOLD_S:.0f} s")
 
 
 if __name__ == "__main__":

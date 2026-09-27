@@ -9,7 +9,8 @@ confirmations) as **JSON**, applies the product's safety and behaviour rules plu
 - The **camera AI** (teammate) sends detections such as `HUMAN_DETECTED`.
 - The **hardware** (when connected) sends sensor inputs and carries out the `actions` in the output.
 
-> ▶ **Quick look:** watch `demo_video.mp4` (36 s). It shows every story with the input JSON, the output JSON and the hub reacting.
+> ▶ **Quick look:** watch [`demo/demo_video.mp4`](demo/demo_video.mp4) (36 s). It shows every story with the input JSON, the output JSON and the hub reacting.
+> 📄 Product requirements: [`docs/PRD.md`](docs/PRD.md) · story images: [`docs/images/`](docs/images/)
 
 ---
 
@@ -38,14 +39,15 @@ python -m venv .venv
 # Windows: .venv\Scripts\activate      macOS/Linux: source .venv/bin/activate
 pip install -r requirements.txt
 
-python demo.py              # plays all 6 stories in the terminal, writes demo_output.json
-python -m pawhub.server     # starts the JSON API on http://0.0.0.0:5000
+# run everything from the project root
+python -m demo.run_demo     # plays all 6 stories in the terminal, writes demo/demo_output.json
+python -m api.server        # starts the JSON API on http://0.0.0.0:5000
 python -m pytest -q         # runs the 23 tests
-python make_video.py        # (optional) re-creates demo_video.mp4
+python -m demo.make_video   # (optional) re-creates demo/demo_video.mp4
 ```
 Use it directly from Python:
 ```python
-from pawhub import Hub
+from device_model import Hub
 hub = Hub()
 hub.handle({"type": "owner", "action": "offer", "feature": "walk"})
 out = hub.handle({"type": "boop"})
@@ -166,7 +168,7 @@ The strap carries a different attachment for each feature:
 | `C_RIGHT` | yellow ring | **PLAY** |
 - One valid pull selects that token. The slot lights up (`choice_slots.<slot>.light = true`), one ear lifts, and the owner is notified.
 - Only **one choice per 60 s window**; other tokens are ignored. The owner confirms with N1.
-- The meanings are set in `pawhub/config.py` (`CHOICES`) and can be changed by the owner.
+- The meanings are set in `device_model/config.py` (`CHOICES`) and can be changed by the owner.
 
 #### Ears and halo (outputs)
 | `ears` value | Meaning / motor gesture |
@@ -191,9 +193,11 @@ The strap carries a different attachment for each feature:
 
 ## 3. The 6 features (stories)
 
-Each story matches one product image. Full input/output for every step: `demo_output.json`.
+Each story matches one product image (in `docs/images/`). Full input/output for every step: `demo/demo_output.json`.
 
 ### 3.1 My Choice: Learn → Choose → Confirm → Go
+![My Choice](docs/images/01_my_choice.jpeg)
+
 | Step | Input | Output highlights |
 |---|---|---|
 | Owner clips the 3 tokens | `{"type":"owner","action":"offer","feature":"choice"}` | `mode: choice`, `N4: READY (choice_tokens)`, `extend_strap` |
@@ -202,6 +206,8 @@ Each story matches one product image. Full input/output for every step: `demo_ou
 | Owner presses N1 | `{"type":"button","node":"N1"}` | `HUMAN_CONFIRMED`, `ears: wave` |
 
 ### 3.2 Roll Again: Bring → Drop → Roll → Again
+![Roll Again](docs/images/02_roll_again.jpeg)
+
 | Step | Input | Output highlights |
 |---|---|---|
 | Owner offers | `{"type":"owner","action":"offer","feature":"roll"}` | `mode: roll`, `N3: ACTIVE` |
@@ -210,6 +216,8 @@ Each story matches one product image. Full input/output for every step: `demo_ou
 | 2 min without a ball | `{"type":"tick"}` | `SESSION_ENDED (idle timeout)` |
 
 ### 3.3 Tidy Together: Cue → Fetch → Drop → Proud
+![Tidy Together](docs/images/03_tidy_together.jpeg)
+
 | Step | Input | Output highlights |
 |---|---|---|
 | Owner presses N1 (nothing pending) | `{"type":"button","node":"N1"}` | `TIDY_CUE`, `mode: tidy`, `play_sound tidy_cue` |
@@ -217,6 +225,8 @@ Each story matches one product image. Full input/output for every step: `demo_ou
 | 2 min without a toy | `{"type":"tick"}` | `SESSION_ENDED` |
 
 ### 3.4 Tug → Treat: Notice → Pull → Response → Reward (keeps the dog active)
+![Tug to Treat](docs/images/04_tug_treat_reward.jpeg)
+
 | Step | Input | Output highlights |
 |---|---|---|
 | Tug offered | `{"type":"owner","action":"offer","feature":"tug"}` | `N4: READY (bone_tug)`, `ears: small_open` |
@@ -227,6 +237,8 @@ Each story matches one product image. Full input/output for every step: `demo_ou
 | Dog pulls the parked strap hard | `{"type":"pull","node":"N4","force":11,...}` | `INPUT_IGNORED`, **no action** |
 
 ### 3.5 Walk request: Ready → Request → Together → Let's go
+![Walk request](docs/images/05_walk_request.jpeg)
+
 | Step | Input | Output highlights |
 |---|---|---|
 | Owner clips harness | `{"type":"owner","action":"offer","feature":"walk"}` | `N4: READY (harness)`, `BOOP: ENABLED` |
@@ -238,6 +250,8 @@ Each story matches one product image. Full input/output for every step: `demo_ou
 If the owner doesn't answer within 10 min, the request expires (`REQUEST_EXPIRED`).
 
 ### 3.6 Arrival greeting: Wait → Arrival detected → Greet
+![Arrival greeting](docs/images/06_arrival_greeting.jpeg)
+
 | Step | Input | Output highlights |
 |---|---|---|
 | Camera, low confidence | `{"type":"camera","event":"HUMAN_DETECTED","confidence":0.45}` | `INPUT_IGNORED (low confidence)` |
@@ -254,7 +268,7 @@ Greets at most once per 10 min. The owner can turn greetings off (`greeting_off`
 
 ## 4. Safety rules (always on, no ML involved)
 
-All values are in `pawhub/config.py` → `LIMITS`.
+All values are in `device_model/config.py` → `LIMITS`.
 
 | Rule | Value |
 |---|---|
@@ -401,7 +415,7 @@ Every event has `event_id`, `ts`, `event` and `mode`, plus extra fields where re
 
 ## 8. HTTP API (for the web app)
 
-Start: `python -m pawhub.server` → `http://<laptop-ip>:5000`. CORS is open, so the web app can run on any host/port.
+Start: `python -m api.server` → `http://<laptop-ip>:5000`. CORS is open, so the web app can run on any host/port.
 
 | Method | Path | Body / query | Returns |
 |---|---|---|---|
@@ -437,7 +451,7 @@ const out = await fetch("http://<laptop-ip>:5000/input", {
 3. Owner controls → `POST /input` with `{"type":"owner",...}` or `{"type":"button","node":"N1"}`.
 4. For a demo without hardware, add "be the dog" buttons that post `pull`, `boop`, `ball_in`, `toy_in_basket`,
    `release` and `output_confirmed`.
-5. Daily page → `GET /summary`. Ready-made sample outputs for every step are in `demo_output.json`.
+5. Daily page → `GET /summary`. Ready-made sample outputs for every step are in `demo/demo_output.json`.
 
 ### 9.2 Camera teammate
 Post detections to `/input`:
@@ -457,18 +471,33 @@ sends `output_confirmed` / `output_failed` after every treat, ball or harness ou
 
 ## 10. Project structure, tests, video
 ```
-pawhub/
-  config.py     all limits, the node map, choice tokens      ← change behaviour here
-  hub.py        the device brain: state machine + 6 features → JSON
-  ml.py         learned threshold, anomaly detector, daily summary
-  server.py     HTTP API (Flask)
-tests/test_hub.py   23 tests: every feature, every safety rule, ML, HTTP API
-demo.py             plays the 6 stories; writes demo_output.json
-demo_output.json    sample input/output JSON for every demo step
-make_video.py       renders demo_video.mp4 from the real model outputs
-demo_video.mp4      36 s explainer video
-requirements.txt
+Laika-A-Pet-Buddy/
+├── device_model/            THE MODEL: the hub's brain (JSON in → JSON out)
+│   ├── config.py            all safety limits, the node/button map, choice tokens   ← change behaviour here
+│   ├── hub.py               Hub class: N4 strap state machine + the 6 features + owner controls
+│   └── ml.py                learned pull threshold, unusual-activity detector, daily summary
+├── api/
+│   └── server.py            HTTP API (Flask) the web app and camera AI call: /input /state /summary /events /layout
+├── demo/
+│   ├── run_demo.py          plays the 6 image stories through the model, prints what happens
+│   ├── demo_output.json     sample input + output JSON for every demo step (for the web app)
+│   ├── make_video.py        renders demo_video.mp4 from the real model outputs
+│   └── demo_video.mp4       36 s explainer video
+├── docs/
+│   ├── PRD.md               product requirements document
+│   └── images/              the 6 story images (01_my_choice … 06_arrival_greeting)
+├── tests/
+│   └── test_hub.py          23 tests: every feature, every safety rule, ML, HTTP API
+├── conftest.py              lets pytest import the packages from the project root
+└── requirements.txt
 ```
+| If you want to… | Look at |
+|---|---|
+| change a limit (treats/day, cooldowns, thresholds) | `device_model/config.py` |
+| understand or change what a button does | `device_model/hub.py` (one method per input: `_boop`, `_button`, `_pull`, …) |
+| change the ML | `device_model/ml.py` |
+| connect the web app / camera | `api/server.py` + section 8 |
+| see real JSON examples | `demo/demo_output.json` |
 
 ## 11. Known limitations
 - **Hardware isn't connected yet.** Everything runs in software; real sensors must send the same input JSON.

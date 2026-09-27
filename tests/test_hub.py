@@ -3,9 +3,9 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from pawhub import Hub
-from pawhub.config import LIMITS as L
-from pawhub.ml import ActivityAnomaly, ThresholdLearner
+from device_model import Hub
+from device_model.config import LIMITS as L
+from device_model.ml import ActivityAnomaly, ThresholdLearner
 
 ANOMALY = ActivityAnomaly()  # train once for all tests
 T0 = datetime(2026, 9, 27, 10, 0, 0)
@@ -280,7 +280,7 @@ def test_daily_summary_uses_confirmed_outputs_only(hc):
 
 # ---------------------------------------------------------------- HTTP API
 def test_http_api():
-    from pawhub.server import create_app
+    from api.server import create_app
     client = create_app(Hub(anomaly=ANOMALY)).test_client()
     out = client.post("/input", json={"type": "owner", "action": "offer", "feature": "walk", "ts": T0.isoformat()}).get_json()
     assert out["mode"] == "walk"
