@@ -138,8 +138,8 @@ detector is [Ultralytics YOLO11](https://github.com/ultralytics/ultralytics).
 
 ## License
 
-No license has been chosen yet, so all rights are reserved by the authors for now. Note that the optional YOLO11
-detector model is AGPL-3.0.
+[MIT](LICENSE). The optional YOLO11 detector model (`models/yolo11n.onnx`, not included in this repository) is
+separately licensed under AGPL-3.0.
 
 ## Project status
 
