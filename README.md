@@ -136,6 +136,7 @@ Safety limits live in [`backend/laika/hub/config.py`](backend/laika/hub/config.p
 - **Rohitkumartangudu**: hub device model, API and demo
 - **Mithravinda KG**: web app design and frontend
 - **Maurya PG**: camera, diary and integration
+- **Ankit Kumar**: prototype development, design, pitch deck, hardware testing, integration and iteration
 
 The product was built at a Claude Opus Build Day. Test clips are from [Pexels](https://www.pexels.com/), and the
 detector is [Ultralytics YOLO11](https://github.com/ultralytics/ultralytics).
