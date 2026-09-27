@@ -1,4 +1,4 @@
-# Laika · Owner web app (hi-fi clickable mockup)
+# Laika · Owner web app
 
 Mobile-first web app for the Laika hub. On a phone it runs fullscreen; on a laptop it shows inside a phone frame.
 Screens that have a back end are **live** when `python -m api.server --camera` is running (see the table
@@ -70,4 +70,4 @@ The back end (`python -m api.server --camera`) serves the device model (`POST /i
   Fraunces for headings, DM Sans for body, Caveat for the diary handwriting).
 - Charts: single-hue sequential sage heatmap; single-series bar charts (the brand sage/ochre pair failed a
   colourblind-safety check when shown together, so the two series are separate charts).
-- `docs/`: the PRD, the handwritten feature list and the storyboard renders.
+- [`../docs/`](../docs/): the PRD, the handwritten feature list (`images/web-app-feature-notes.png`) and the storyboard renders (`images/01…06`).
