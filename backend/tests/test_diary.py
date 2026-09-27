@@ -4,12 +4,12 @@ from datetime import datetime
 import numpy as np
 import pytest
 
-from camera.detector import drop_person_lookalikes, mask_out_people
-from camera.vision import Episode
-from device_model import Hub
-from diary import owner_report
-from diary.claude import build_timeline, diary_moments, offline_diary
-from diary.hub_events import drive, hub_stats, moment_for, simulate_hub_day
+from laika.camera.detector import drop_person_lookalikes, mask_out_people
+from laika.camera.vision import Episode
+from laika.hub import Hub
+from laika.diary import owner_report
+from laika.diary.claude import build_timeline, diary_moments, offline_diary
+from laika.diary.hub_events import drive, hub_stats, moment_for, simulate_hub_day
 
 DAY = datetime(2026, 9, 27, 7, 0)
 
@@ -83,18 +83,18 @@ def test_people_are_never_the_dog():
     assert mask[50, 30] == 0 and mask[50, 90] == 255
 
 
-@pytest.mark.skipif(not __import__("camera.detector", fromlist=["x"]).DogDetector.available(),
+@pytest.mark.skipif(not __import__("laika.camera.detector", fromlist=["x"]).DogDetector.available(),
                     reason="models/yolo11n.onnx not downloaded")
 def test_detector_loads_and_runs():
-    from camera.detector import DogDetector
+    from laika.camera.detector import DogDetector
     dogs, people = DogDetector().detect(np.zeros((360, 640, 3), np.uint8))
     assert dogs == [] and people == []
 
 
 def test_api_camera_mode_shares_one_hub(tmp_path):
-    """python -m api.server --camera: web app inputs, the camera and the diary all use one Hub."""
-    from api.server import create_app
-    from diary.live import App, build_parser
+    """laika-server --camera: web app inputs, the camera and the diary all use one Hub."""
+    from laika.api.server import create_app
+    from laika.diary.live import App, build_parser
     live = App(build_parser().parse_args(["--offline", "--out", str(tmp_path)]))  # no capture thread started
     client = create_app(live=live).test_client()
 

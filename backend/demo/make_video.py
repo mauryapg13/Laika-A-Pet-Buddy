@@ -1,4 +1,4 @@
-"""Renders a ~36 s explainer video of the device model:  python -m demo.make_video  -> demo/demo_video.mp4
+"""Renders a ~36 s explainer video of the device model:  python backend/demo/make_video.py  -> demo/demo_video.mp4
 
 Left: the hub (button states, ears, halo light, treat/ball drops). Right: input JSON and the model's output.
 Uses the real model outputs from the same stories as demo.py.
@@ -14,8 +14,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Ellipse, FancyBboxPatch
 
-from demo.run_demo import STORIES
-from device_model import Hub
+from run_demo import STORIES
+from laika.hub import Hub
 
 VIDEO_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "demo_video.mp4")
 FPS, HOLD_S, W, H, DPI = 12, 1.45, 12.8, 7.2, 100

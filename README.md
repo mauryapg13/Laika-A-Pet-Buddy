@@ -5,12 +5,12 @@ A camera watches over the dog, and every evening the dog "writes" a diary about 
 
 Laika has three parts:
 
-- **The hub brain** (`device_model/`) turns every pull, boop and button press into safe, predictable outcomes.
+- **The hub brain** (`laika.hub`) turns every pull, boop and button press into safe, predictable outcomes.
   Harder pulls never win. Treats are capped and sensor-confirmed, and the harness is only released after the
   owner says yes.
-- **The camera** (`camera/`) tracks the dog, spots people and labels behaviour (sleeping, tugging, zoomies,
+- **The camera** (`laika.camera`) tracks the dog, spots people and labels behaviour (sleeping, tugging, zoomies,
   waiting at the door…). When someone comes home, the hub waves its ears hello.
-- **The diary** (`diary/`) uses Claude to turn the day's camera footage and hub events into a short, warm diary
+- **The diary** (`laika.diary`) uses Claude to turn the day's camera footage and hub events into a short, warm diary
   entry in the dog's voice. It may only mention things that actually happened. The owner also gets a separate,
   factual report.
 
@@ -31,7 +31,7 @@ Requirements:
 git clone https://github.com/mauryapg13/Laika-A-Pet-Buddy.git
 cd Laika-A-Pet-Buddy
 python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -e "backend[dev]"
 cd web && npm install && cd ..
 ```
 
@@ -51,7 +51,7 @@ echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
 Run the back end and the web app in two terminals:
 
 ```bash
-python -m api.server --camera          # hub + camera + diary on http://localhost:5050
+laika-server --camera          # hub + camera + diary on http://localhost:5050
 cd web && npm run dev                  # web app on http://localhost:5173
 ```
 
@@ -79,23 +79,27 @@ Other entry points:
 
 | Command | What it does |
 |---|---|
-| `python -m api.server` | Hub API only (no camera) |
-| `python -m diary.live` | Stand-alone camera + diary page with "be the dog" buttons (http://localhost:8765) |
-| `python -m diary <video>` | Whole-day diary + owner report from a recorded video |
-| `python -m demo.run_demo` | Plays the hub's six feature stories in the terminal |
-| `python -m pytest -q` | Runs the test suite |
+| `laika-server` | Hub API only (no camera) |
+| `laika-live` | Stand-alone camera + diary page with "be the dog" buttons (http://localhost:8765) |
+| `laika-diary <video>` | Whole-day diary + owner report from a recorded video |
+| `python backend/demo/run_demo.py` | Plays the hub's six feature stories in the terminal |
+| `pytest backend` | Runs the test suite |
 
 ### Project layout
 
 ```
-device_model/   hub brain: node state machine, 6 features, safety rules, small ML
-api/            HTTP API around the hub (+ camera and diary with --camera)
-camera/         OpenCV + YOLO dog/person tracking → behaviour episodes
-diary/          hub + camera events → Claude diary, owner report, live mode
-web/            owner web app (React + Vite)
-demo/           scripted hub stories and explainer video
-docs/           reference docs, product requirements, images
-tests/          pytest suite
+backend/                 Python back end (pip install -e backend)
+├── laika/
+│   ├── hub/             hub brain: node state machine, 6 features, safety rules, small ML
+│   ├── api/             HTTP API around the hub (+ camera and diary with --camera)
+│   ├── camera/          OpenCV + YOLO dog/person tracking → behaviour episodes
+│   └── diary/           hub + camera events → Claude diary, owner report, live mode
+├── demo/                scripted hub stories and explainer video
+├── tests/               pytest suite
+└── pyproject.toml       dependencies and the laika-* commands
+web/                     owner web app (React + Vite)
+docs/                    reference docs, product requirements, images
+data/videos/             camera zone files for the test clips
 ```
 
 ### Documentation
@@ -105,7 +109,7 @@ tests/          pytest suite
   and batch runs.
 - [Web app](web/README.md): screens, and which data is live and which is mock.
 - [Product requirements](docs/PRD.md).
-- [Demo video](demo/demo_video.mp4) (36 s): every hub story with its input and output JSON.
+- [Demo video](backend/demo/demo_video.mp4) (36 s): every hub story with its input and output JSON.
 
 ## Support
 
@@ -122,10 +126,10 @@ Found a bug or have a question? [Open an issue](https://github.com/mauryapg13/La
 ## Contributing
 
 1. Create a branch and make your change.
-2. Run `python -m pytest -q` and, for web changes, `cd web && npm run build`.
+2. Run `pytest backend` and, for web changes, `cd web && npm run build`.
 3. Open a pull request into `main`.
 
-Safety limits live in [`device_model/config.py`](device_model/config.py). Change them there, never in ML code.
+Safety limits live in [`backend/laika/hub/config.py`](backend/laika/hub/config.py). Change them there, never in ML code.
 
 ## Authors
 

@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "laika"
+version = "0.1.0"
+description = "Laika: a wall hub for dogs, with a camera and a diary the dog writes"
+license = "MIT"
+requires-python = ">=3.10"
+dependencies = [
+    "flask>=2.3",
+    "numpy",
+    "scikit-learn>=1.3",
+    "opencv-python>=4.9",
+    "anthropic>=1.8",
+    "markdown>=3.5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+video = ["matplotlib", "imageio", "imageio-ffmpeg"]  # only for demo/make_video.py
+
+[project.scripts]
+laika-server = "laika.api.server:main"
+laika-live = "laika.diary.live:main"
+laika-diary = "laika.diary.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["laika*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,9 +1,9 @@
 """Live demo: webcam -> behaviour tracking + the Laika hub -> a diary that writes itself as things happen.
 
-    python -m diary.live --name Pablo              # laptop camera
-    python -m diary.live --source data/videos/x.mp4  # replay a file at real speed (loops)
+    laika-live --name Pablo              # laptop camera
+    laika-live --source data/videos/x.mp4  # replay a file at real speed (loops)
 
-Open http://localhost:8765. A real device_model.Hub runs in-process: the camera feeds it HUMAN_DETECTED
+Open http://localhost:8765. A real laika.hub.Hub runs in-process: the camera feeds it HUMAN_DETECTED
 (which triggers Laika's greeting) and the dog's activity; the page's buttons stand in for the hub's
 physical buttons and sensors. "End of day" writes the whole-day diary, the real product deliverable.
 """
@@ -26,10 +26,10 @@ import anthropic
 import cv2
 import numpy as np
 
-from camera.config import VisionConfig
-from camera.detector import DogDetector, drop_person_lookalikes, mask_out_people
-from camera.vision import STATE_EMOJI, Snapshot, _classify, _draw, _find_dog, _shrink, _zone_of
-from device_model import Hub
+from laika.camera.config import VisionConfig
+from laika.camera.detector import DogDetector, drop_person_lookalikes, mask_out_people
+from laika.camera.vision import STATE_EMOJI, Snapshot, _classify, _draw, _find_dog, _shrink, _zone_of
+from laika.hub import Hub
 
 from .env import load_dotenv
 from .hub_events import HUB_CONTEXT, drive, moment_for
@@ -519,7 +519,7 @@ def make_handler(app: App):
     return Handler
 
 
-def build_parser(prog: str = "python -m diary.live") -> argparse.ArgumentParser:
+def build_parser(prog: str = "laika-live") -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog=prog, description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--source", default="0", help="camera index (0 = built-in) or a video file to replay")
     ap.add_argument("--name", default="Pablo")

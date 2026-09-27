@@ -1,6 +1,6 @@
 """Draw the configured zones and a 10% grid over a frame of your footage, to help set DEFAULT_ZONES.
 
-    python -m camera.calibrate data/videos/my_dog.mp4 [seconds_in]
+    python -m laika.camera.calibrate data/videos/my_dog.mp4 [seconds_in]
 """
 import sys
 
@@ -28,7 +28,7 @@ def main():
         cv2.putText(frame, name, (int(x1 * w) + 4, int(y1 * h) + 18), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 200, 255), 2)
     out = "out/calibration.jpg"
     cv2.imwrite(out, frame)
-    print(f"wrote {out}. Adjust DEFAULT_ZONES in camera/config.py (or write <video>.zones.json) so each box covers where the dog's feet go.")
+    print(f"wrote {out}. Adjust DEFAULT_ZONES in laika/camera/config.py (or write <video>.zones.json) so each box covers where the dog's feet go.")
 
 
 if __name__ == "__main__":

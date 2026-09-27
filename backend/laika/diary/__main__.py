@@ -1,10 +1,10 @@
 """Laika camera + diary: camera footage + the Laika hub's event log -> the dog's diary and the owner's report.
 
-    python -m diary data/videos/synthetic_day.mp4 --name Pablo --breed "beagle mix" \
+    laika-diary data/videos/synthetic_day.mp4 --name Pablo --breed "beagle mix" \
         --start 07:00 --time-scale 280 --persona foodie
 
 Hub events come from --hub-events (a JSON list, e.g. saved from GET /events), --hub-url (a running
-`python -m api.server`), or, if neither is given, a real Hub driven through a simulated day.
+`laika-server`), or, if neither is given, a real Hub driven through a simulated day.
 """
 from __future__ import annotations
 
@@ -17,8 +17,8 @@ from pathlib import Path
 
 import anthropic
 
-from camera.config import VisionConfig
-from camera.vision import analyze_video
+from laika.camera.config import VisionConfig
+from laika.camera.vision import analyze_video
 
 from . import owner_report
 from .claude import (build_timeline, caption_keyframes, credentials_available, diary_moments, offline_diary,
@@ -68,7 +68,7 @@ figure img{{width:100%;display:block}} figcaption{{padding:8px;font-size:.8rem;c
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="python -m diary", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(prog="laika-diary", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("video")
     ap.add_argument("--name", default="Pablo")
     ap.add_argument("--breed", default="good dog of unknown origin")
@@ -106,7 +106,7 @@ def main(argv=None):
           + ", ".join(f"{k} {v}s" for k, v in vision.stats["seconds_by_state"].items()))
 
     print("[2/4] Loading the Laika hub's events ...")
-    from device_model import Hub
+    from laika.hub import Hub
     hub = Hub()
     if args.hub_events or args.hub_url:
         if args.hub_url:
@@ -118,7 +118,7 @@ def main(argv=None):
     else:
         hub = simulate_hub_day(start, vision.episodes, args.time_scale, vision.human_visits,
                                humans_tracked=vision.stats.get("humans_detectable", False), persona=args.persona)
-        print(f"      (simulated '{args.persona}' day through device_model.Hub)")
+        print(f"      (simulated '{args.persona}' day through laika.hub.Hub)")
     (out / "hub_events.json").write_text(json.dumps(hub.events, indent=1))
     hub_counts = hub_stats(hub, args.date)
     print(f"      {len(hub.events)} hub events: {hub_counts['treats_confirmed']} treats, "

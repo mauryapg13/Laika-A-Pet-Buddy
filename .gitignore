@@ -14,3 +14,5 @@ data/videos/*.mp4
 # web app (web/)
 node_modules
 dist
+*.egg-info/
+build/

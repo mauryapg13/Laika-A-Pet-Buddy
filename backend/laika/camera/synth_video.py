@@ -1,7 +1,7 @@
 """Render a cartoon 'dog cam' clip with a scripted day, so the pipeline can be tested end to end
 without real footage. The script's segments are the ground truth to compare the tracker against.
 
-    python -m camera.synth_video data/videos/synthetic_day.mp4
+    python -m laika.camera.synth_video data/videos/synthetic_day.mp4
 """
 from __future__ import annotations
 

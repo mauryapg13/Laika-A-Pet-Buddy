@@ -3,8 +3,10 @@ import os
 from pathlib import Path
 
 
-def load_dotenv(path: Path = Path(__file__).resolve().parent.parent / ".env"):
-    """Minimal .env reader (KEY=value lines). Variables already set in the shell win."""
+def load_dotenv(path: Path | None = None):
+    """Minimal .env reader (KEY=value lines): ./.env, else the repo root's. Variables already set in the shell win."""
+    from laika import REPO_ROOT
+    path = path or next((p for p in (Path.cwd() / ".env", REPO_ROOT / ".env") if p.exists()), REPO_ROOT / ".env")
     if not path.exists():
         return
     for line in path.read_text().splitlines():
