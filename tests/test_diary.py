@@ -89,3 +89,25 @@ def test_detector_loads_and_runs():
     from camera.detector import DogDetector
     dogs, people = DogDetector().detect(np.zeros((360, 640, 3), np.uint8))
     assert dogs == [] and people == []
+
+
+def test_api_camera_mode_shares_one_hub(tmp_path):
+    """python -m api.server --camera: web app inputs, the camera and the diary all use one Hub."""
+    from api.server import create_app
+    from diary.live import App, build_parser
+    live = App(build_parser().parse_args(["--offline", "--out", str(tmp_path)]))  # no capture thread started
+    client = create_app(live=live).test_client()
+
+    client.post("/input", json={"type": "owner", "action": "offer", "feature": "tug"})
+    for _ in range(6):
+        client.post("/input", json={"type": "pull", "node": "N4", "force": 5.0, "duration_ms": 700})
+    state = client.get("/live").get_json()
+    assert state["hub"]["treats"] == 1                          # sensor auto-confirmed, counted once
+    assert state["hub"]["counts"]["valid_pulls"] == 6
+    assert any("treat" in n for n in state["hub"]["notifications"])
+    assert "the hub gave me a treat for a good tug round" in [m["moment"] for m in live.diary.moments]
+    assert client.get("/state").get_json()["counters"]["treats_today"] == 1   # same hub via the plain API
+
+    client.post("/diary/finish")
+    days = client.get("/diary/days").get_json()
+    assert len(days) == 1 and next(iter(days.values()))["text"].rstrip().endswith("🐾")

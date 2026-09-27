@@ -3,17 +3,19 @@ import {
   Camera as CameraIcon, CircleDot, Eye, EyeOff, Maximize2, Mic, Play, Volume2, VolumeX, WifiOff,
 } from 'lucide-react'
 import { entryFor } from '../diary'
+import { BEHAVIOUR_TEXT, STREAM_URL } from '../api'
 
 // Mock cameras around the home. `look` applies a CSS treatment to the frame.
 const CAMERAS = [
-  { id: 'hub', name: 'Laika hub', room: 'Study', src: '/photos/dog-6169.jpg', pos: 'center 45%', dog: true },
+  // `live`: shows the real camera stream when the back end is running (the other cameras are mock).
+  { id: 'hub', name: 'Laika hub', room: 'Study', src: '/photos/dog-6169.jpg', pos: 'center 45%', dog: true, live: true },
   { id: 'study', name: 'Desk corner', room: 'Study', src: '/photos/dog-6170.jpg', pos: 'center 60%', dog: true, look: 'wide' },
   { id: 'hall', name: 'Hallway', room: 'Entrance', src: '/photos/cam-hallway.jpg', pos: 'center', motion: '12 min ago' },
   { id: 'bed', name: 'Bedroom', room: 'Upstairs', src: '/photos/dog-6168.jpg', pos: 'center 40%', look: 'night', motion: '1 hr ago' },
   { id: 'yard', name: 'Backyard', room: 'Outside', offline: true },
 ]
 
-function Feed({ cam, big, now, muted }) {
+function Feed({ cam, big, now, muted, streaming }) {
   if (cam.offline) {
     return (
       <div className={`feed feed-offline ${big ? 'feed-big' : ''}`}>
@@ -24,7 +26,7 @@ function Feed({ cam, big, now, muted }) {
   }
   return (
     <div className={`feed ${big ? 'feed-big' : ''} look-${cam.look || 'normal'}`}>
-      <img src={cam.src} alt={`${cam.name} camera`} style={{ objectPosition: cam.pos }} />
+      <img src={cam.live && streaming ? STREAM_URL : cam.src} alt={`${cam.name} camera`} style={{ objectPosition: cam.pos }} />
       <span className="feed-live"><i /> LIVE</span>
       {big && (
         <span className="feed-time">
@@ -37,7 +39,7 @@ function Feed({ cam, big, now, muted }) {
   )
 }
 
-export default function CameraView({ profile, date }) {
+export default function CameraView({ laika, profile, date }) {
   const [active, setActive] = useState('hub')
   const [mode, setMode] = useState(date ? 'recordings' : 'live')
   const [now, setNow] = useState(new Date())
@@ -51,6 +53,9 @@ export default function CameraView({ profile, date }) {
   const dogCam = CAMERAS.find((c) => c.dog)
   const recDate = date || new Date()
   const entry = entryFor(recDate)
+  const live = laika?.connected ? laika.live : null
+  const dogInView = live ? live.label && live.label !== 'away' : true
+  const doing = live?.label ? BEHAVIOUR_TEXT[live.label] ?? live.label : null
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000)
@@ -81,9 +86,11 @@ export default function CameraView({ profile, date }) {
             </div>
           ) : (
             <div className="player">
-              <Feed cam={cam} big now={now} muted={muted} />
+              <Feed cam={cam} big now={now} muted={muted} streaming={!!live} />
               {flash && <div className="flash" />}
-              {cam.dog && !cam.offline && <span className="detect">{name} detected</span>}
+              {cam.dog && !cam.offline && dogInView && (
+                <span className="detect">{name} detected{cam.live && live ? ` · ${doing}` : ''}</span>
+              )}
             </div>
           )}
 
@@ -117,7 +124,7 @@ export default function CameraView({ profile, date }) {
             <div className="cam-grid">
               {CAMERAS.map((c) => (
                 <button key={c.id} className={`cam-tile ${active === c.id ? 'is-on' : ''}`} onClick={() => setActive(c.id)}>
-                  <Feed cam={c} now={now} />
+                  <Feed cam={c} now={now} streaming={!!live} />
                   <span className="cam-name">{c.name}</span>
                   <span className="cam-sub">{c.offline ? 'Offline' : c.dog ? `${name} here` : c.room}</span>
                 </button>

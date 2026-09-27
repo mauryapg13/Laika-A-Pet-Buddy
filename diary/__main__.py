@@ -79,7 +79,7 @@ def main(argv=None):
     ap.add_argument("--time-scale", type=float, default=1.0,
                     help="video seconds -> real seconds. Use >1 to let a short test clip stand in for a whole day.")
     ap.add_argument("--hub-events", help="JSON list of Laika hub events (e.g. saved from GET /events)")
-    ap.add_argument("--hub-url", help="fetch events from a running hub API, e.g. http://localhost:5000")
+    ap.add_argument("--hub-url", help="fetch events from a running hub API, e.g. http://localhost:5050")
     ap.add_argument("--persona", choices=list(PERSONAS), default="foodie", help="habits for the simulated hub day")
     ap.add_argument("--sample-fps", type=float, default=2.0)
     ap.add_argument("--zones", help="JSON of {zone: [x1, y1, x2, y2]} (normalized). "

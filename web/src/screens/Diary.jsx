@@ -3,18 +3,44 @@ import { CalendarDays, ChevronLeft, ChevronRight, Play, Printer, Sparkles, Video
 import CalendarSheet from '../components/CalendarSheet'
 import PawPrint from '../components/PawPrint'
 import { DAYS_BACK, dateKey, entryFor, startOfDay } from '../diary'
+import { BEHAVIOUR_TEXT, STREAM_URL, finishDay, splitDiary } from '../api'
 
 const STAT_LABELS = [
   ['walks', 'Walks'], ['naps', 'Naps'], ['treats', 'Treats'], ['boops', 'Boops'], ['barks', 'Barks'],
 ]
 
-export default function Diary({ profile, date, onDate, onOpenCamera, onOpenSummary }) {
+export default function Diary({ laika, profile, date, onDate, onOpenCamera, onOpenSummary }) {
   const [calOpen, setCalOpen] = useState(false)
+  const [finishing, setFinishing] = useState(false)
   const stripRef = useRef(null)
   const today = startOfDay(new Date())
   const days = Array.from({ length: DAYS_BACK + 1 }, (_, i) =>
     new Date(today.getFullYear(), today.getMonth(), today.getDate() - DAYS_BACK + i))
-  const entry = entryFor(date)
+  const isToday = dateKey(date) === dateKey(today)
+  const live = laika?.connected ? laika.live : null
+  const saved = laika?.days?.[dateKey(date)]
+  // Real entries first: today's live diary from the back end, then diaries saved on past days, then the mockups.
+  let entry
+  if (live && isToday) {
+    const c = live.hub.counts
+    const shared = {
+      mood: live.label ? BEHAVIOUR_TEXT[live.label] ?? live.label : 'curious', photo: STREAM_URL, caption: 'live now',
+      moments: live.moments, stats: { walks: c.harness_releases, naps: '–', treats: live.hub.treats, boops: c.boops, barks: '–' },
+    }
+    entry = live.final
+      ? { kind: 'final', title: 'The whole day', ...splitDiary(live.final), ...shared }
+      : { kind: 'live', title: 'Today, so far', body: ['Dear diary,', ...live.entries.map((e) => e.text)], signoff: null, ...shared }
+  } else if (saved) {
+    entry = { kind: 'saved', title: `${profile.name}'s day`, ...splitDiary(saved.text), mood: 'remembered', photo: profile.photo }
+  } else {
+    const mock = entryFor(date)
+    entry = mock && { kind: 'mock', ...mock, photo: mock.clips[0][2], caption: mock.clips[0][1].toLowerCase() }
+  }
+  const hasEntry = (d) => entryFor(d) || laika?.days?.[dateKey(d)] || (live && dateKey(d) === dateKey(today))
+  const finish = async () => {
+    setFinishing(true)
+    try { await finishDay(); await laika.refreshDays() } finally { setFinishing(false) }
+  }
   const idx = days.findIndex((d) => dateKey(d) === dateKey(date))
   const fill = (s) => s.replaceAll('{name}', profile.name)
 
@@ -43,7 +69,7 @@ export default function Diary({ profile, date, onDate, onOpenCamera, onOpenSumma
           >
             <span className="date-wd">{d.toLocaleDateString('en-US', { weekday: 'short' })}</span>
             <span className="date-num">{d.getDate()}</span>
-            <span className={`date-dot ${entryFor(d) ? '' : 'is-empty'}`} />
+            <span className={`date-dot ${hasEntry(d) ? '' : 'is-empty'}`} />
           </button>
         ))}
       </div>
@@ -57,19 +83,26 @@ export default function Diary({ profile, date, onDate, onOpenCamera, onOpenSumma
             </div>
             <figure className="polaroid">
               <span className="tape" />
-              <img src={entry.clips[0][2]} alt="" />
-              <figcaption>{entry.clips[0][1].toLowerCase()}</figcaption>
+              <img src={entry.photo} alt="" />
+              {entry.caption && <figcaption>{entry.caption}</figcaption>}
             </figure>
             <h2 className="page-title">{entry.title}</h2>
             <div className="page-body">
               {entry.body.map((p, i) => <p key={i}>{fill(p)}</p>)}
+              {entry.kind === 'live' && !live.entries.length && (
+                <p className="muted small">Laika starts writing as soon as {profile.name} does something.</p>
+              )}
+              {entry.kind === 'live' && live.writing && <p className="muted small">✍️ writing…</p>}
             </div>
             <div className="signoff">
-              <span>Love, {profile.name}</span>
+              <span>{entry.signoff ?? 'Love'}, {profile.name}</span>
               <PawPrint size={46} className="paw" />
             </div>
             <p className="page-source">
-              <Sparkles size={12} /> Written by Laika from {entry.moments} moments caught on camera
+              <Sparkles size={12} /> {entry.kind === 'live' ? `Written live by Laika from ${entry.moments} moments so far`
+                : entry.kind === 'final' ? `Written by Laika from ${entry.moments} moments today`
+                : entry.kind === 'saved' ? 'Written by Laika at the end of the day'
+                : `Written by Laika from ${entry.moments} moments caught on camera`}
             </p>
           </article>
 
@@ -85,7 +118,13 @@ export default function Diary({ profile, date, onDate, onOpenCamera, onOpenSumma
             </button>
           </div>
 
-          <section className="card">
+          {entry.kind === 'live' && (
+            <button className="btn btn-outline glance-btn" onClick={finish} disabled={finishing}>
+              {finishing ? 'Writing the whole day…' : 'Finish the day'}
+            </button>
+          )}
+
+          {entry.clips && <section className="card">
             <div className="card-head">
               <h3 className="card-title"><Video size={14} /> From the camera</h3>
               <button className="link-btn" onClick={() => onOpenCamera(date)}>Open feed <ChevronRight size={14} /></button>
@@ -100,9 +139,9 @@ export default function Diary({ profile, date, onDate, onOpenCamera, onOpenSumma
                 </button>
               ))}
             </div>
-          </section>
+          </section>}
 
-          <section className="card">
+          {entry.stats && <section className="card">
             <div className="card-head">
               <h3 className="card-title"><Sparkles size={14} /> Day at a glance</h3>
             </div>
@@ -114,7 +153,7 @@ export default function Diary({ profile, date, onDate, onOpenCamera, onOpenSumma
             <button className="btn btn-outline glance-btn" onClick={() => onOpenSummary(date)}>
               See full day summary
             </button>
-          </section>
+          </section>}
         </>
       ) : (
         <div className="diary-empty">

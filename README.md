@@ -29,6 +29,7 @@ confirmations) as **JSON**, applies the product's safety and behaviour rules plu
 10. [Project structure, tests, video](#10-project-structure-tests-video)
 11. [Known limitations](#11-known-limitations)
 12. [Camera + diary](#12-camera--diary)
+13. [Web app + one back end](#13-web-app--one-back-end)
 
 ---
 
@@ -44,7 +45,7 @@ pip install -r requirements.txt
 
 # run everything from the project root
 python -m demo.run_demo     # plays all 6 stories in the terminal, writes demo/demo_output.json
-python -m api.server        # starts the JSON API on http://0.0.0.0:5000
+python -m api.server        # starts the JSON API on http://0.0.0.0:5050
 python -m pytest -q         # runs the 23 tests
 python -m demo.make_video   # (optional) re-creates demo/demo_video.mp4
 ```
@@ -418,7 +419,7 @@ Every event has `event_id`, `ts`, `event` and `mode`, plus extra fields where re
 
 ## 8. HTTP API (for the web app)
 
-Start: `python -m api.server` → `http://<laptop-ip>:5000`. CORS is open, so the web app can run on any host/port.
+Start: `python -m api.server` → `http://<laptop-ip>:5050`. CORS is open, so the web app can run on any host/port.
 
 | Method | Path | Body / query | Returns |
 |---|---|---|---|
@@ -430,15 +431,15 @@ Start: `python -m api.server` → `http://<laptop-ip>:5000`. CORS is open, so th
 
 Examples:
 ```bash
-curl -X POST localhost:5000/input -H "Content-Type: application/json" \
+curl -X POST localhost:5050/input -H "Content-Type: application/json" \
      -d '{"type":"owner","action":"offer","feature":"walk"}'
-curl -X POST localhost:5000/input -H "Content-Type: application/json" -d '{"type":"boop"}'
-curl localhost:5000/state
-curl localhost:5000/summary
+curl -X POST localhost:5050/input -H "Content-Type: application/json" -d '{"type":"boop"}'
+curl localhost:5050/state
+curl localhost:5050/summary
 ```
 ```javascript
 // web app
-const out = await fetch("http://<laptop-ip>:5000/input", {
+const out = await fetch("http://<laptop-ip>:5050/input", {
   method: "POST", headers: {"Content-Type": "application/json"},
   body: JSON.stringify({type: "button", node: "N1"})
 }).then(r => r.json());
@@ -502,6 +503,7 @@ Laika-A-Pet-Buddy/
 │   ├── claude.py            keyframe captions + strict, grounded diary writing (Claude API)
 │   └── owner_report.py      factual owner report (no LLM)
 ├── data/videos/             test clips (*.mp4 not committed) + per-clip *.zones.json
+├── web/                     owner web app (React + Vite): see web/README.md and section 13
 ├── tests/
 │   ├── test_hub.py          23 tests: every feature, every safety rule, ML, HTTP API
 │   └── test_diary.py        camera/diary ↔ hub integration tests
@@ -572,7 +574,7 @@ python -m camera.synth_video data/videos/synthetic_day.mp4           # cartoon t
 python -m diary data/videos/synthetic_day.mp4 --name Pablo --time-scale 280 --persona foodie
 ```
 - Hub events come from `--hub-events events.json` (a list, e.g. saved from `GET /events`), from `--hub-url
-  http://localhost:5000` (a running `python -m api.server`), or, by default, from a real `Hub` driven through a
+  http://localhost:5050` (a running `python -m api.server`), or, by default, from a real `Hub` driven through a
   simulated day. That day lines up with the camera: tugging on camera becomes a tug round, waiting at the door
   becomes a walk request, and people seen become `HUMAN_DETECTED`. `--persona foodie|athlete|diva` sets the habits.
 - Output goes to `out/<date>_<name>/`:
@@ -605,4 +607,35 @@ python -m diary data/videos/synthetic_day.mp4 --name Pablo --time-scale 280 --pe
   - The synthetic day: all 9 scripted segments recovered.
   - Three Pexels clips: dog at the bowl → `eating`, corgi at the door → `waiting_at_door`, two dogs with a rope toy →
     `tugging`.
+
+---
+
+## 13. Web app + one back end
+
+The owner web app lives in [`web/`](web/) (React + Vite, mobile-first). One back-end process serves the hub API,
+the camera and the diary around the **same** hub. A button pressed in the app shows up in the diary, and the
+camera's greeting shows up in the app.
+
+```bash
+# terminal 1 (repo root): hub API + camera + live diary on http://localhost:5050
+python -m api.server --camera                  # add --track-anything for a demo without a dog
+# terminal 2
+cd web && npm install && npm run dev           # open http://localhost:5173 (or the Network URL on your phone)
+```
+
+- **Live in the app:**
+  - Dashboard: "Pablo is tugging…", online/stop state, boops, requests, treats and the latest notification.
+  - Notifications.
+  - Diary: today's live entry plus **Finish the day**, and saved past days.
+  - The "Laika hub" camera tile.
+  - Settings → Safety: emergency stop/resume, treats on/off, park the strap.
+- **Still mock:** node setup (its node model differs from the hub, see `web/README.md`), Insights, Voice tracking,
+  Profile and Help. Every screen falls back to its mock data when the back end is off.
+- `python -m api.server` without `--camera` is the plain hub API, as before.
+- The camera options are the same as `diary.live` (`--source`, `--name`, `--zones`, `--track-anything`,
+  `--offline`).
+- The API port is **5050**, because macOS's AirPlay Receiver holds 5000. Change it with `--api-port`, and point the
+  app at it with `VITE_LAIKA_API` in `web/.env.local`.
+- Without hardware, outputs (treat, ball, harness) are confirmed by a simulated sensor, so the counts behave like
+  the real hub.
 

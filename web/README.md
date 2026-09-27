@@ -1,18 +1,23 @@
 # Laika · Owner web app (hi-fi clickable mockup)
 
 Mobile-first web app for the Laika hub. On a phone it runs fullscreen; on a laptop it shows inside a phone frame.
-Everything runs on **mock data**. No back end is connected yet. This README explains where each screen's data
-comes from today and which device-model API endpoint should replace it.
+Screens that have a back end are **live** when `python -m api.server --camera` is running (see the table
+below). Everything else still runs on **mock data**.
 
 ## Run it
 
-Requires Node 18+.
+Requires Node 18+. Run from `web/`:
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173 (also shows a Network URL to open on your phone)
 npm run build      # production build in dist/
 ```
+
+For live data, also start the back end from the repo root: `python -m api.server --camera` (port 5050). The app
+finds it on the same host as the page, so a phone on the same Wi-Fi works too. Point it elsewhere with
+`VITE_LAIKA_API=http://host:port` in `web/.env.local`. Without the back end, every screen shows its mock data.
+The connection code is in `src/api.js`.
 
 ## Screens
 
@@ -30,22 +35,24 @@ npm run build      # production build in dist/
 
 Not built yet: onboarding and a full notifications screen (notifications are currently a bottom sheet).
 
-## Mock data → device-model API
+## Mock data → back end
 
-The device model (`api/server.py` in the Laika-A-Pet-Buddy repo) exposes `POST /input`, `GET /state`,
-`GET /summary`, `GET /events` and `GET /layout`. Suggested wiring:
+The back end (`python -m api.server --camera`) serves the device model (`POST /input`, `GET /state`,
+`GET /summary`, `GET /events`, `GET /layout`) and the camera + diary (`GET /live`, `GET /camera/stream`,
+`POST /diary/finish`, `GET /diary/days`) around **one** hub.
 
-| UI | Mock source today | Replace with |
+| UI | Status | Source |
 |---|---|---|
-| Hub drawing: node states, labels | `SLOTS`, `DEFAULT_NODES` in `src/data.js` | `GET /layout` for labels, poll `GET /state` (~1 s) for `nodes`, `ears`, `halo` |
-| Node setup: Save | `localStorage` (`laika.nodes.v1`) | `POST /input` with owner actions (`offer` / `park` per feature) |
-| Notifications sheet | `NOTIFICATIONS` in `src/data.js` | `notifications` from `GET /state` |
-| Diary entries + clips | `src/diary.js` | output of the `diary/` module |
-| Insights + diary "day summary" | `src/insights.js`, `entryFor()` in `src/diary.js` | `GET /summary?day=YYYY-MM-DD` |
-| Voice tracking log | `LOG` in `src/screens/VoiceTracking.jsx` | `BARK_EVENT` + owner events from `GET /events` |
-| Camera view | static photos in `public/photos/` | `camera/` module streams / clips |
-| Emergency stop (Settings → Safety) | local state | `POST /input` `{"type":"owner","action":"stop"}`, then `reset` |
-| Profile | `DEFAULT_PROFILE` in `src/data.js`, `localStorage` | new endpoint (not in the device model yet) |
+| Dashboard: "Pablo is …", online/stop state, boops / requests / treats, latest | ✅ live | `GET /live` (camera behaviour + hub counters + notifications) |
+| Notifications sheet | ✅ live | hub notifications via `GET /live` |
+| Diary: today | ✅ live | live entries via `GET /live`; **Finish the day** → `POST /diary/finish` |
+| Diary: past days | ✅ live (saved days) | `GET /diary/days`; mock `src/diary.js` for days without a saved diary |
+| Camera view: "Laika hub" tile | ✅ live | `GET /camera/stream` (MJPEG) + detected behaviour; the other cameras are mock |
+| Settings → Safety: emergency stop / resume, treat dispensing, tug play | ✅ live | `POST /input` owner `stop` / `reset`, `treats_off` / `treats_on`, `park` |
+| Hub drawing + node setup (Save) | mock | node model differs from the hub (see below); `localStorage` |
+| Insights | mock | `src/insights.js` (could use `GET /summary`) |
+| Voice tracking | mock | no bark detection in the back end yet |
+| Profile, Help | mock | `src/data.js`, `localStorage` |
 
 ### Known differences to reconcile
 

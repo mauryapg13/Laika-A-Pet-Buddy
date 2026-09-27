@@ -3,6 +3,7 @@ import {
   BellRing, ChevronRight, Cpu, Globe, LogOut, OctagonX, Plus, RefreshCw, Shield, ShieldAlert, Trash2, UserRound, Video, Wifi,
 } from 'lucide-react'
 import Sheet from '../components/Sheet'
+import { hubInput } from '../api'
 
 const PEOPLE = [
   { name: 'You', role: 'Owner', initial: 'Y' },
@@ -36,7 +37,7 @@ function LinkRow({ label, value, onClick, danger }) {
   )
 }
 
-export default function Settings({ profile, onHelp }) {
+export default function Settings({ laika, profile, onHelp }) {
   const [s, setS] = useState({
     requests: true, sessions: true, unusual: true, barks: false, diary: true, quiet: true,
     camera: true, mic: true, cloud: false, retention: 30,
@@ -48,14 +49,23 @@ export default function Settings({ profile, onHelp }) {
   const set = (k) => (v) => setS((p) => ({ ...p, [k]: v }))
   const say = (msg) => { setToast(msg); setTimeout(() => setToast(null), 2000) }
   const name = profile.name
+  // Safety controls reach the real hub when the back end is running (owner actions in POST /input).
+  const connected = laika?.connected
+  const hubStopped = connected && laika.live.hub.device_state === 'FAULT'
+  const owner = (action) => connected && hubInput({ type: 'owner', action }).catch(() => say('Laika did not answer'))
+  const isStopped = stopped || hubStopped
+  const stopNow = () => { setStopped(true); setStopOpen(false); owner('stop') }
+  const resume = () => { setStopped(false); owner('reset') }
+  const setDispensing = (v) => { set('dispensing')(v); owner(v ? 'treats_on' : 'treats_off') }
+  const setResistance = (v) => { set('resistance')(v); if (!v) owner('park') }
 
   return (
     <div className="settings">
-      {stopped && (
+      {isStopped && (
         <div className="stop-banner">
           <OctagonX size={18} />
           <span>All motors stopped. Straps are loose and dispensing is off.</span>
-          <button onClick={() => setStopped(false)}>Resume</button>
+          <button onClick={resume}>Resume</button>
         </div>
       )}
 
@@ -93,11 +103,11 @@ export default function Settings({ profile, onHelp }) {
       </Group>
 
       <Group title="Safety" Icon={Shield}>
-        <button className="estop" onClick={() => setStopOpen(true)} disabled={stopped}>
-          <OctagonX size={20} /> {stopped ? 'Motors stopped' : 'Emergency stop'}
+        <button className="estop" onClick={() => setStopOpen(true)} disabled={isStopped}>
+          <OctagonX size={20} /> {isStopped ? 'Motors stopped' : 'Emergency stop'}
         </button>
-        <Toggle label="Treat dispensing" sub="Turn off to block all food output" checked={s.dispensing} onChange={set('dispensing')} />
-        <Toggle label="Tug and resistance play" sub="Off parks every pull strap" checked={s.resistance} onChange={set('resistance')} />
+        <Toggle label="Treat dispensing" sub="Turn off to block all food output" checked={s.dispensing} onChange={setDispensing} />
+        <Toggle label="Tug and resistance play" sub="Off parks every pull strap" checked={s.resistance} onChange={setResistance} />
       </Group>
 
       <Group title="Notifications" Icon={BellRing}>
@@ -156,7 +166,7 @@ export default function Settings({ profile, onHelp }) {
           footer={
             <>
               <button className="btn btn-ghost" onClick={() => setStopOpen(false)}>Cancel</button>
-              <button className="btn btn-danger" onClick={() => { setStopped(true); setStopOpen(false) }}>Stop now</button>
+              <button className="btn btn-danger" onClick={stopNow}>Stop now</button>
             </>
           }
         >

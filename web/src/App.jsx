@@ -15,6 +15,7 @@ import Settings from './screens/Settings'
 import Help from './screens/Help'
 import { startOfDay } from './diary'
 import { DEFAULT_NODES, DEFAULT_PROFILE, SCREENS } from './data'
+import { useLaika } from './api'
 
 const STORAGE_KEY = 'laika.nodes.v1'
 const PROFILE_KEY = 'laika.profile.v3'
@@ -51,6 +52,12 @@ export default function App() {
   const [profile, setProfile] = useState(loadProfile)
   const [diaryDate, setDiaryDate] = useState(() => startOfDay(new Date()))
   const [dayContext, setDayContext] = useState(null) // date passed from the diary to camera/insights
+  const laika = useLaika() // live hub + camera + diary from the back end (mock data if it's off)
+  const liveNotifCount = laika.live?.hub.notifications.length ?? 0
+
+  useEffect(() => {
+    if (liveNotifCount) setUnread(true) // a new hub notification arrived
+  }, [liveNotifCount])
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(nodes))
@@ -86,6 +93,7 @@ export default function App() {
             />
           ) : current === 'home' ? (
             <Dashboard
+              laika={laika}
               nodes={nodes}
               profile={profile}
               onSelectNode={setEditing}
@@ -95,6 +103,7 @@ export default function App() {
             <Profile profile={profile} onChange={setProfile} />
           ) : current === 'diary' ? (
             <Diary
+              laika={laika}
               profile={profile}
               date={diaryDate}
               onDate={setDiaryDate}
@@ -109,9 +118,9 @@ export default function App() {
               onOpenDiary={() => { setDiaryDate(dayContext); setDayContext(null); setTab('diary') }}
             />
           ) : current === 'camera' ? (
-            <CameraView key={dayContext ? dayContext.toDateString() : 'live'} profile={profile} date={dayContext} />
+            <CameraView key={dayContext ? dayContext.toDateString() : 'live'} laika={laika} profile={profile} date={dayContext} />
           ) : current === 'settings' ? (
-            <Settings profile={profile} onHelp={() => setMenuScreen('help')} />
+            <Settings laika={laika} profile={profile} onHelp={() => setMenuScreen('help')} />
           ) : current === 'help' ? (
             <Help profile={profile} />
           ) : current === 'voice' ? (
@@ -134,7 +143,7 @@ export default function App() {
             onSelect={(id) => { setMenuScreen(id); setMenuOpen(false); setDayContext(null) }}
           />
         )}
-        {notifOpen && <NotificationsSheet onClose={() => setNotifOpen(false)} />}
+        {notifOpen && <NotificationsSheet laika={laika} name={profile.name} onClose={() => setNotifOpen(false)} />}
       </div>
     </div>
   )
