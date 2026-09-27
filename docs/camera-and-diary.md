@@ -25,7 +25,7 @@ pip install -e "backend[dev]"
 mkdir -p models && curl -L -o models/yolo11n.onnx \
     https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.onnx
 # Claude: create .env with ANTHROPIC_API_KEY=... (plus ANTHROPIC_WORKSPACE_ID=... for org-level keys).
-# Optional: LAIKA_MODEL=claude-opus-5-5 (default claude-opus-5). Without a key you get plain fallback text.
+# Optional: LAIKA_MODEL=<model id> (default claude-opus-5-5). Without a key you get plain fallback text.
 ```
 
 ### 1.2 Live demo (laptop camera)

@@ -22,7 +22,7 @@ from .hub_events import HUB_CONTEXT, hub_timeline_rows
 
 
 def _model() -> str:
-    return os.environ.get("LAIKA_MODEL") or "claude-opus-5"  # read at call time so .env overrides apply
+    return os.environ.get("LAIKA_MODEL") or "claude-opus-5-5"  # read at call time so .env overrides apply
 # Server-side refusal fallback: a declined request is re-run on Anthropic's recommended fallback model.
 FALLBACK_BETA = "server-side-fallback-2026-07-01"
 
