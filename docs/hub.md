@@ -1,14 +1,14 @@
 # Laika hub: device model reference
 
-The hub's brain lives in [`device_model/`](../device_model/). It reads every input (dog pulls, boops, owner
+The hub's brain lives in [`backend/laika/hub/`](../backend/laika/hub/). It reads every input (dog pulls, boops, owner
 buttons, camera detections, sensor confirmations) as **JSON**, applies the product's safety and behaviour rules
-plus a little ML, and returns the **full hub state as JSON**. [`api/server.py`](../api/server.py) wraps it in a
+plus a little ML, and returns the **full hub state as JSON**. [`laika/api/server.py`](../backend/laika/api/server.py) wraps it in a
 small HTTP API.
 
 Try it without hardware:
-- `python -m demo.run_demo` plays all 6 stories in the terminal and writes
-  [`demo/demo_output.json`](../demo/demo_output.json).
-- `python -m demo.make_video` re-renders [`demo/demo_video.mp4`](../demo/demo_video.mp4).
+- `python backend/demo/run_demo.py` plays all 6 stories in the terminal and writes
+  [`demo/demo_output.json`](../backend/demo/demo_output.json).
+- `python backend/demo/make_video.py` (needs `pip install -e "backend[video]"`) re-renders [`demo/demo_video.mp4`](../backend/demo/demo_video.mp4).
 
 1. [Nodes and buttons](#1-the-hub-every-node-and-button)
 2. [The 6 features](#2-the-6-features-stories)
@@ -132,7 +132,7 @@ The strap carries a different attachment for each feature:
 | `C_RIGHT` | yellow ring | **PLAY** |
 - One valid pull selects that token. The slot lights up (`choice_slots.<slot>.light = true`), one ear lifts, and the owner is notified.
 - Only **one choice per 60 s window**; other tokens are ignored. The owner confirms with N1.
-- The meanings are set in `device_model/config.py` (`CHOICES`) and can be changed by the owner.
+- The meanings are set in `backend/laika/hub/config.py` (`CHOICES`) and can be changed by the owner.
 
 #### Ears and halo (outputs)
 | `ears` value | Meaning / motor gesture |
@@ -155,7 +155,7 @@ The strap carries a different attachment for each feature:
 
 ## 2. The 6 features (stories)
 
-Each story matches one product image (in [`images/`](images/)). Full input/output for every step: [`demo/demo_output.json`](../demo/demo_output.json).
+Each story matches one product image (in [`images/`](images/)). Full input/output for every step: [`demo/demo_output.json`](../backend/demo/demo_output.json).
 
 ### 2.1 My Choice: Learn → Choose → Confirm → Go
 ![My Choice](images/01_my_choice.jpeg)
@@ -228,7 +228,7 @@ Greets at most once per 10 min. The owner can turn greetings off (`greeting_off`
 
 ## 3. Safety rules (always on, no ML involved)
 
-All values are in `device_model/config.py` → `LIMITS`.
+All values are in `backend/laika/hub/config.py` → `LIMITS`.
 
 | Rule | Value |
 |---|---|
@@ -367,7 +367,7 @@ Every event has `event_id`, `ts`, `event` and `mode`, plus extra fields where re
 
 ## 7. HTTP API (for the web app)
 
-Start: `python -m api.server` → `http://<laptop-ip>:5050`. CORS is open, so the web app can run on any host/port.
+Start: `laika-server` → `http://<laptop-ip>:5050`. CORS is open, so the web app can run on any host/port.
 
 | Method | Path | Body / query | Returns |
 |---|---|---|---|
@@ -396,16 +396,16 @@ const out = await fetch("http://<laptop-ip>:5050/input", {
 ## 8. Integration guides
 
 ### 8.1 Web app
-The web app ([`web/`](../web/)) talks to this API. With `python -m api.server --camera` it also gets the camera,
+The web app ([`web/`](../web/)) talks to this API. With `laika-server --camera` it also gets the camera,
 live diary and notifications from `GET /live` (see [camera-and-diary.md](camera-and-diary.md#2-web-app--one-back-end)).
 - Owner controls → `POST /input` with `{"type":"owner",...}` or `{"type":"button","node":"N1"}`.
 - Poll `GET /state` (about every 1 s, which also drives the timers) to draw the hub from `nodes`, `ears`, `halo` and
   `choice_slots`.
 - Daily page → `GET /summary`. Sample outputs for every step are in
-  [`demo/demo_output.json`](../demo/demo_output.json).
+  [`demo/demo_output.json`](../backend/demo/demo_output.json).
 
 ### 8.2 Camera
-The camera module ([`camera/`](../camera/)) posts detections as camera inputs:
+The camera module ([`laika/camera/`](../backend/laika/camera/)) posts detections as camera inputs:
 ```json
 {"type": "camera", "event": "HUMAN_DETECTED", "confidence": 0.91}
 ```
@@ -413,6 +413,7 @@ The camera module ([`camera/`](../camera/)) posts detections as camera inputs:
 `BARK_EVENT`) are stored with their confidence and appear in `/summary.camera`.
 
 ### 8.3 Hardware (not connected yet)
+The physical design (body, nodes, sensors, safety) is in [hardware.md](hardware.md).
 The sensors only need to produce the input JSON in section 5. For example, a microcontroller reads the N4 load cell
 and sends `{"type":"pull","node":"N4","force":5.1,"duration_ms":600}` over USB serial, and a small bridge script posts
 it to `/input`. The hardware then carries out each item in `actions` (motor, spout, ear servos, LEDs, speaker), and

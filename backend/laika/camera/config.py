@@ -1,8 +1,8 @@
-"""Tunable camera settings: zones and motion thresholds. (Hub rules live in device_model/config.py.)"""
+"""Tunable camera settings: zones and motion thresholds. (Hub rules live in laika/hub/config.py.)"""
 from dataclasses import dataclass, field
 
 # Zones are normalized (x1, y1, x2, y2) rectangles in the camera frame, 0..1.
-# Calibrate these once per camera placement: `python -m camera.calibrate <video>`.
+# Calibrate these once per camera placement: `python -m laika.camera.calibrate <video>`.
 DEFAULT_ZONES = {
     "food_bowl": (0.02, 0.62, 0.25, 0.98),
     "door": (0.80, 0.05, 0.99, 0.60),

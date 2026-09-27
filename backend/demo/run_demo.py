@@ -1,7 +1,7 @@
 """Runs the 6 image stories through the device model and prints what the hub does.
 
-    python -m demo.run_demo          # readable story log
-    python -m demo.run_demo --json   # also print the full JSON output of every step
+    python backend/demo/run_demo.py          # readable story log
+    python backend/demo/run_demo.py --json   # also print the full JSON output of every step
 Every step's full JSON is saved to demo/demo_output.json (sample data for the web app).
 """
 import json
@@ -9,7 +9,7 @@ import os
 import sys
 from datetime import datetime, timedelta
 
-from device_model import Hub
+from laika.hub import Hub
 
 OUT_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "demo_output.json")
 

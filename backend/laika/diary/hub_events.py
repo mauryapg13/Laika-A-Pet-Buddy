@@ -1,4 +1,4 @@
-"""Bridge between the Laika hub (device_model.Hub) and the diary.
+"""Bridge between the Laika hub (laika.hub.Hub) and the diary.
 
 - `moment_for(event)`: a hub event in the dog's words ("the hub gave me a treat"), or None if the dog
   wouldn't notice it (PULL_START, SESSION_ENDED, ...).
@@ -12,8 +12,8 @@ import heapq
 import random
 from datetime import datetime, timedelta
 
-from device_model import Hub
-from device_model.config import CHOICES
+from laika.hub import Hub
+from laika.hub.config import CHOICES
 
 CHOICE_WORDS = {"OUTSIDE": "go outside", "REST": "rest", "PLAY": "play"}
 

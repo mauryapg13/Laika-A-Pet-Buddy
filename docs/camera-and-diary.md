@@ -9,18 +9,18 @@ The camera watches the dog, the hub records what the dog does with it, and at th
 a diary entry about it. The owner gets a separate factual report.
 
 ```
-camera ──► camera/vision.py (2-3 snapshots/s)                 Laika Hub (device_model)
+camera ──► laika/camera/vision.py (2-3 snapshots/s)           Laika Hub (laika.hub)
             YOLO dog + person detection, MOG2 motion              ▲  camera inputs: HUMAN_DETECTED → greeting,
             → behaviour episodes, keyframes, human visits ────────┘                  DOG_<BEHAVIOUR> labels
                       │                                            │ events (tug reps, treats, walk requests,
                       ▼                                            ▼  greetings, lockouts, ball rolls, tidy…)
-             diary/claude.py: one timeline → numbered "moments" → Claude writes the diary (only those moments)
-             diary/owner_report.py: camera + hub counters → factual report (no LLM)
+             laika/diary/claude.py: one timeline → numbered "moments" → Claude writes the diary (only those moments)
+             laika/diary/owner_report.py: camera + hub counters → factual report (no LLM)
 ```
 
 ### 1.1 Setup
 ```bash
-pip install -r requirements.txt
+pip install -e "backend[dev]"
 # Dog/person detector (10.9 MB, AGPL-3.0). Without it, tracking falls back to motion only.
 mkdir -p models && curl -L -o models/yolo11n.onnx \
     https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.onnx
@@ -30,7 +30,7 @@ mkdir -p models && curl -L -o models/yolo11n.onnx \
 
 ### 1.2 Live demo (laptop camera)
 ```bash
-python -m diary.live --name Pablo          # open http://localhost:8765
+laika-live --name Pablo          # open http://localhost:8765
 ```
 - A real `Hub` runs in-process. The page's **Owner** buttons (offer tug / walk / ball / choice, N1, park) and
   **Dog** buttons (pull strap, let go, boop, ball in pocket, toy in basket, choice ropes, music) send the same JSON
@@ -46,11 +46,11 @@ python -m diary.live --name Pablo          # open http://localhost:8765
 
 ### 1.3 Whole-day batch run
 ```bash
-python -m camera.synth_video data/videos/synthetic_day.mp4           # cartoon test day with known ground truth
-python -m diary data/videos/synthetic_day.mp4 --name Pablo --time-scale 280 --persona foodie
+python -m laika.camera.synth_video data/videos/synthetic_day.mp4           # cartoon test day with known ground truth
+laika-diary data/videos/synthetic_day.mp4 --name Pablo --time-scale 280 --persona foodie
 ```
 - Hub events come from `--hub-events events.json` (a list, e.g. saved from `GET /events`), from `--hub-url
-  http://localhost:5050` (a running `python -m api.server`), or, by default, from a real `Hub` driven through a
+  http://localhost:5050` (a running `laika-server`), or, by default, from a real `Hub` driven through a
   simulated day. That day lines up with the camera: tugging on camera becomes a tug round, waiting at the door
   becomes a walk request, and people seen become `HUMAN_DETECTED`. `--persona foodie|athlete|diva` sets the habits.
 - Output goes to `out/<date>_<name>/`:
@@ -74,7 +74,7 @@ python -m diary data/videos/synthetic_day.mp4 --name Pablo --time-scale 280 --pe
 ### 1.5 Camera details
 - Behaviours: `sleeping` · `resting` · `wandering` · `zoomies` · `playing` · `tugging` · `eating` ·
   `waiting_at_door` · `away`. Zone-based ones (bowl, door, tug) need zones. Run
-  `python -m camera.calibrate <video> 5` and put the result in `<video>.zones.json`.
+  `python -m laika.camera.calibrate <video> 5` and put the result in `<video>.zones.json`.
 - Speeds are measured in dog body lengths per second, so thresholds work for close-ups and wide shots alike. Net
   travel over about 2 s separates walking from tugging in place.
 - A still dog fades into the MOG2 background, so an "empty room" reference tells a sleeping dog apart from one that
@@ -92,7 +92,7 @@ camera's greeting shows up in the app.
 
 ```bash
 # terminal 1 (repo root): hub API + camera + live diary on http://localhost:5050
-python -m api.server --camera                  # add --track-anything for a demo without a dog
+laika-server --camera                  # add --track-anything for a demo without a dog
 # terminal 2
 cd web && npm install && npm run dev           # open http://localhost:5173 (or the Network URL on your phone)
 ```
@@ -105,7 +105,7 @@ cd web && npm install && npm run dev           # open http://localhost:5173 (or 
   - Settings → Safety: emergency stop/resume, treats on/off, park the strap.
 - **Still mock:** node setup (its node model differs from the hub, see [`web/README.md`](../web/README.md)), Insights, Voice tracking,
   Profile and Help. Every screen falls back to its mock data when the back end is off.
-- `python -m api.server` without `--camera` is the plain hub API, as before.
+- `laika-server` without `--camera` is the plain hub API, as before.
 - The camera options are the same as `diary.live` (`--source`, `--name`, `--zones`, `--track-anything`,
   `--offline`).
 - The API port is **5050**, because macOS's AirPlay Receiver holds 5000. Change it with `--api-port`, and point the

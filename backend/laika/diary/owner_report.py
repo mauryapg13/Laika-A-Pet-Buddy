@@ -2,7 +2,7 @@
 Camera behaviour + the Laika hub's own counters. The dog's diary is separate (claude.write_diary)."""
 from __future__ import annotations
 
-from camera.vision import STATE_EMOJI, Episode
+from laika.camera.vision import STATE_EMOJI, Episode
 
 LABELS = {
     "sleeping": "Sleeping", "resting": "Resting", "wandering": "Walking around", "zoomies": "Zoomies",
@@ -104,6 +104,6 @@ def build(dog: dict, date: str, timeline: list[dict], vision_stats: dict, hub: d
           + (f", stretched ×{time_scale:g} to represent the day" if time_scale != 1 else "") + ".",
           f"- {len(episodes)} behaviour episodes from OpenCV tracking; photo checks are Claude's reading of one "
           f"keyframe per episode.",
-          "- Hub log: " + ("**simulated** (a real `device_model.Hub` driven by a synthetic day)." if synthetic_hub
+          "- Hub log: " + ("**simulated** (a real `laika.hub.Hub` driven by a synthetic day)." if synthetic_hub
                            else "from the Laika hub.")]
     return "\n".join(L)

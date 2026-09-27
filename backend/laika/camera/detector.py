@@ -4,25 +4,30 @@ Model: models/yolo11n.onnx from github.com/ultralytics/assets (AGPL-3.0).
 """
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import cv2
 import numpy as np
 
-MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "yolo11n.onnx"
+from laika import REPO_ROOT
+
+def model_path() -> Path:
+    """models/yolo11n.onnx at the repo root, or LAIKA_DETECTOR_MODEL=/path/to/model.onnx (checked at use time, after .env)."""
+    return Path(os.environ.get("LAIKA_DETECTOR_MODEL") or REPO_ROOT / "models" / "yolo11n.onnx")
 # COCO ids. Small/curled-up dogs are regularly scored as "cat", so both count as the dog.
 PERSON, DOG, CAT = 0, 16, 15
 INPUT = 640
 
 
 class DogDetector:
-    def __init__(self, model_path: str | Path = MODEL_PATH, min_score: float = 0.35):
-        self.net = cv2.dnn.readNetFromONNX(str(model_path))
+    def __init__(self, path: str | Path | None = None, min_score: float = 0.35):
+        self.net = cv2.dnn.readNetFromONNX(str(path or model_path()))
         self.min_score = min_score
 
     @classmethod
     def available(cls) -> bool:
-        return MODEL_PATH.exists()
+        return model_path().exists()
 
     def detect(self, frame: np.ndarray):
         """Returns (dogs, people): each [(x1, y1, x2, y2, score)] normalized to the frame, best first."""

@@ -1,4 +1,4 @@
-"""Run from the project root:  python -m api.server [--camera]
+"""Run from the project root:  laika-server [--camera]
 
 Tiny HTTP API so the web app can talk to the device model (JSON only).
 
@@ -15,16 +15,17 @@ the camera and the diary all see one device:
     GET  /camera/stream   MJPEG live view with tracking boxes (use as an <img src>)
     POST /diary/finish    write today's whole-day diary (saved under out/)
     GET  /diary/days      saved diaries by date: {"YYYY-MM-DD": {"text", "folder"}}
-Other --camera options are the same as `python -m diary.live` (--source, --name, --track-anything, ...).
+Other --camera options are the same as `laika-live` (--source, --name, --track-anything, ...).
 """
 import argparse
+import os
 import threading
 import time
 
 from flask import Flask, Response, jsonify, request
 
-from device_model import Hub
-from device_model.config import CHOICES, LIMITS, NODES
+from laika.hub import Hub
+from laika.hub.config import CHOICES, LIMITS, NODES
 
 
 def create_app(hub: Hub = None, live=None) -> Flask:
@@ -80,7 +81,7 @@ def create_app(hub: Hub = None, live=None) -> Flask:
         return jsonify({"nodes": NODES, "choices": CHOICES, "limits": LIMITS})
 
     if live is not None:
-        from diary.live import saved_diaries
+        from laika.diary.live import saved_diaries
 
         @app.get("/live")
         def live_state():
@@ -112,11 +113,12 @@ def create_app(hub: Hub = None, live=None) -> Flask:
 
 
 def main():
-    ap = argparse.ArgumentParser(prog="python -m api.server", add_help=False)
+    ap = argparse.ArgumentParser(prog="laika-server", add_help=False)
     ap.add_argument("--camera", action="store_true", help="also run the camera + live diary on the same hub")
     ap.add_argument("--host", default="0.0.0.0")
     ap.add_argument("--api-port", type=int, default=5050)  # not 5000: macOS AirPlay Receiver holds it
     known, rest = ap.parse_known_args()
+    os.environ.setdefault("FLASK_SKIP_DOTENV", "1")  # Laika reads .env itself (laika.diary.env)
     if not known.camera:
         if rest:
             ap.error(f"unrecognized arguments: {' '.join(rest)} (camera options need --camera)")
@@ -124,9 +126,9 @@ def main():
         create_app().run(host=known.host, port=known.api_port, threaded=True)
         return
 
-    from diary.env import load_dotenv
-    from diary.live import App, build_parser
-    live_args = build_parser("python -m api.server --camera").parse_args(rest)
+    from laika.diary.env import load_dotenv
+    from laika.diary.live import App, build_parser
+    live_args = build_parser("laika-server --camera").parse_args(rest)
     load_dotenv()
     live = App(live_args)
     threading.Thread(target=live.capture_loop, daemon=True).start()

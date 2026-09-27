@@ -1,7 +1,7 @@
 # Laika · Owner web app
 
 Mobile-first web app for the Laika hub. On a phone it runs fullscreen; on a laptop it shows inside a phone frame.
-Screens that have a back end are **live** when `python -m api.server --camera` is running (see the table
+Screens that have a back end are **live** when `laika-server --camera` is running (see the table
 below). Everything else still runs on **mock data**.
 
 ## Run it
@@ -14,7 +14,7 @@ npm run dev        # http://localhost:5173 (also shows a Network URL to open on 
 npm run build      # production build in dist/
 ```
 
-For live data, also start the back end from the repo root: `python -m api.server --camera` (port 5050). The app
+For live data, also start the back end from the repo root: `laika-server --camera` (port 5050). The app
 finds it on the same host as the page, so a phone on the same Wi-Fi works too. Point it elsewhere with
 `VITE_LAIKA_API=http://host:port` in `web/.env.local`. Without the back end, every screen shows its mock data.
 The connection code is in `src/api.js`.
@@ -37,7 +37,7 @@ Not built yet: onboarding and a full notifications screen (notifications are cur
 
 ## Mock data → back end
 
-The back end (`python -m api.server --camera`) serves the device model (`POST /input`, `GET /state`,
+The back end (`laika-server --camera`) serves the device model (`POST /input`, `GET /state`,
 `GET /summary`, `GET /events`, `GET /layout`) and the camera + diary (`GET /live`, `GET /camera/stream`,
 `POST /diary/finish`, `GET /diary/days`) around **one** hub.
 
