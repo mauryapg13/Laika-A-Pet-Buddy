@@ -1,6 +1,6 @@
 """Live demo: webcam -> behaviour tracking + the Laika hub -> a diary that writes itself as things happen.
 
-    python -m diary.live --name Biscuit              # laptop camera
+    python -m diary.live --name Pablo              # laptop camera
     python -m diary.live --source data/videos/x.mp4  # replay a file at real speed (loops)
 
 Open http://localhost:8765. A real device_model.Hub runs in-process: the camera feeds it HUMAN_DETECTED
@@ -230,6 +230,17 @@ class LiveDiary:
         return text
 
 
+def saved_diaries(out_dir: str | Path) -> dict[str, dict]:
+    """Diaries already written to out/, newest per day: {"YYYY-MM-DD": {"text", "folder"}}."""
+    found: dict[str, dict] = {}
+    for f in sorted(Path(out_dir).glob("*/diary.md"), key=lambda f: f.stat().st_mtime):
+        name = f.parent.name
+        day = name[5:15] if name.startswith("live_") else name[:10]
+        if len(day) == 10 and day[4] == "-" and day[7] == "-":
+            found[day] = {"text": f.read_text(), "folder": name}
+    return found
+
+
 class App:
     def __init__(self, args):
         self.args = args
@@ -261,7 +272,7 @@ class App:
                     m = moment_for(e)
                     if m:
                         self.diary.add(m)
-                self.notifications = (self.notifications + out["notifications"])[-6:]
+                self.notifications = (self.notifications + out["notifications"])[-20:]
                 if out["ears"] != "neutral" or out["halo"] != "off":
                     self.gesture = {"ears": out["ears"], "halo": out["halo"], "until": time.time() + 4}
             self.hub_out = outs[-1]
@@ -339,23 +350,41 @@ class App:
                 with self.lock:
                     self.jpeg = buf.tobytes()
 
+    def finish_day(self) -> Path:
+        """Write the whole-day diary and save it with the hub's log. Returns the folder."""
+        text = self.diary.finish(datetime.now().strftime("%Y-%m-%d"))
+        out = Path(self.args.out) / f"live_{datetime.now():%Y-%m-%d_%H%M}_{self.dog['name'].lower()}"
+        out.mkdir(parents=True, exist_ok=True)
+        (out / "diary.md").write_text(text)
+        with self.hub_lock:
+            hub_events, summary = list(self.hub.events), self.hub.summary()
+        with self.diary.lock:
+            entries, moments = list(self.diary.entries), list(self.diary.moments)
+        (out / "live_entries.json").write_text(json.dumps({"entries": entries, "moments": moments}, indent=1))
+        (out / "hub_events.json").write_text(json.dumps(hub_events, indent=1))
+        (out / "hub_summary.json").write_text(json.dumps(summary, indent=1))
+        print(f"End-of-day diary saved to {out}/")
+        return out
+
     def state_json(self) -> dict:
         with self.lock:
             snap = self.snap
         with self.diary.lock:
             entries, final = list(self.diary.entries), self.diary.final
-            pending = len(self.diary.pending)
+            pending, n_moments = len(self.diary.pending), len(self.diary.moments)
         with self.hub_lock:
             h = self.hub_out
             g = self.gesture if time.time() < self.gesture["until"] else {"ears": "neutral", "halo": "off"}
             hub = {"mode": h["mode"], "device_state": h["device_state"], "strap": h["nodes"]["N4"]["state"],
                    "n1": h["nodes"]["N1"]["state"], "ears": g["ears"], "halo": g["halo"],
                    "treats": h["counters"]["treats_today"], "treats_limit": h["counters"]["treats_limit_day"],
-                   "reps": h["counters"]["tug_reps"], "notifications": list(self.notifications)}
+                   "reps": h["counters"]["tug_reps"], "notifications": list(self.notifications),
+                   "counts": self.hub.summary()["counts"]}
         label = self.state or (snap.label if snap else None)
         return {"label": label, "emoji": STATE_EMOJI.get(label or "", ""), "human": self.human,
                 "track_anything": self.tracker.track_anything, "entries": entries, "writing": pending > 0,
-                "final": final, "hub": hub, "claude": self.diary.use_claude}
+                "final": final, "moments": n_moments, "hub": hub, "claude": self.diary.use_claude,
+                "dog": self.dog, "date": datetime.now().strftime("%Y-%m-%d")}
 
 
 PAGE = r"""<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -482,17 +511,7 @@ def make_handler(app: App):
                     return self._send(400, b'{"error":"body must be JSON"}')
                 self._send(200, json.dumps(app.send(msg)).encode())
             elif url.path == "/finish":
-                text = app.diary.finish(datetime.now().strftime("%Y-%m-%d"))
-                out = Path(app.args.out) / f"live_{datetime.now():%Y-%m-%d_%H%M}_{app.dog['name'].lower()}"
-                out.mkdir(parents=True, exist_ok=True)
-                (out / "diary.md").write_text(text)
-                with app.hub_lock:
-                    hub_events, summary = list(app.hub.events), app.hub.summary()
-                (out / "live_entries.json").write_text(json.dumps(
-                    {"entries": app.diary.entries, "moments": app.diary.moments}, indent=1))
-                (out / "hub_events.json").write_text(json.dumps(hub_events, indent=1))
-                (out / "hub_summary.json").write_text(json.dumps(summary, indent=1))
-                print(f"End-of-day diary saved to {out}/")
+                app.finish_day()
                 self._send(200, json.dumps({"ok": True}).encode())
             else:
                 self._send(404, b"{}")
@@ -500,11 +519,10 @@ def make_handler(app: App):
     return Handler
 
 
-def main():
-    ap = argparse.ArgumentParser(prog="python -m diary.live", description=__doc__,
-                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+def build_parser(prog: str = "python -m diary.live") -> argparse.ArgumentParser:
+    ap = argparse.ArgumentParser(prog=prog, description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--source", default="0", help="camera index (0 = built-in) or a video file to replay")
-    ap.add_argument("--name", default="Biscuit")
+    ap.add_argument("--name", default="Pablo")
     ap.add_argument("--breed", default="good dog of unknown origin")
     ap.add_argument("--zones", help="zones JSON for this camera view (optional)")
     ap.add_argument("--sample-fps", type=float, default=3.0)
@@ -514,6 +532,11 @@ def main():
     ap.add_argument("--offline", action="store_true", help="no Claude calls")
     ap.add_argument("--track-anything", action="store_true",
                     help="demo without a dog: follow whatever moves (people included) as the dog")
+    return ap
+
+
+def main():
+    ap = build_parser()
     args = ap.parse_args()
     load_dotenv()
 
