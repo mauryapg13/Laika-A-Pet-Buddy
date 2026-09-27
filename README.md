@@ -1,10 +1,11 @@
 <div align="center">
   <img src="./docs/images/04_tug_treat_reward.jpeg" alt="Concept render of the Laika wall hub: a dog pulls the strap and a treat drops" width="100%">
-  <sub>Concept render. The working prototype is built with LEGO Mindstorms (photo below).</sub>
+  <sub>Concept render. The working prototype is built with LEGO Mindstorms (<a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link">photos</a>).</sub>
   <h1>Laika: A Pet Buddy</h1>
   <p><b>Your dog can ask for a walk, a game or a treat, and tells you about its day.</b></p>
   <a href="MISSING.md"><img src="https://img.shields.io/badge/Live_demo-TODO-lightgrey" alt="Live demo (link coming)"></a>
-  <a href="MISSING.md"><img src="https://img.shields.io/badge/Watch-Video_TODO-lightgrey" alt="Demo video (link coming)"></a>
+  <a href="https://drive.google.com/drive/folders/1tM4M4Gp0hgJtHhK0ji7wILBPc_LMXQQz?usp=drive_link"><img src="https://img.shields.io/badge/Watch-Video-ef4444" alt="Watch the demo video"></a>
+  <a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link"><img src="https://img.shields.io/badge/See-Build_photos-56704f" alt="Build photos"></a>
   <img src="https://img.shields.io/badge/Built_with-Claude_Opus_5.5-d97757" alt="Built with Claude Opus 5.5">
   <img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT license">
   <p><a href="#why">Why</a> · <a href="#see-it-work">Demo</a> · <a href="#photos">Photos</a> · <a href="#new-capability">New capability</a> · <a href="#how-it-works">How it works</a> · <a href="#run-it">Run it</a> · <a href="#team">Team</a></p>
@@ -24,6 +25,7 @@ voice, about what really happened.
 <div align="center">
   <img src="./docs/images/demo.gif" alt="Screen recording: the app shows Pablo tugging, then the diary writes itself live" width="300">
   <br><sub>Real screen recording. The camera replays a test clip of dogs tugging; the hub counts a tug round and the diary writes itself.</sub>
+  <p><a href="https://drive.google.com/drive/folders/1tM4M4Gp0hgJtHhK0ji7wILBPc_LMXQQz?usp=drive_link"><img src="https://img.shields.io/badge/▶_Watch_the_full_demo-ef4444?style=for-the-badge" alt="Watch the full demo video"></a></p>
 </div>
 
 **What just happened:**
@@ -35,20 +37,14 @@ voice, about what really happened.
 
 ## Photos
 
-> [!IMPORTANT]
-> Photos needed: the finished LEGO Mindstorms build, you with the build, team photo, wiring/mechanism close-ups,
-> behind-the-scenes. Add them to `./docs/images` and attach them to the GitHub Release. See [MISSING.md](MISSING.md).
+**Build and team photos (LEGO Mindstorms prototype):** [Google Drive folder](https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link). **Pitch video:**
+[Google Drive](https://drive.google.com/drive/folders/1tM4M4Gp0hgJtHhK0ji7wILBPc_LMXQQz?usp=drive_link).
 
 <table>
   <tr>
-    <td align="center" width="33%"><b>Photo needed:</b><br>finished LEGO Mindstorms build</td>
-    <td align="center" width="33%"><b>Photo needed:</b><br>you with your build</td>
-    <td align="center" width="33%"><b>Photo needed:</b><br>team photo</td>
-  </tr>
-  <tr>
     <td align="center"><img src="./docs/images/app-screens.jpg" width="260" alt="App screens: home, live diary, camera view"><br><sub>UI: home, live diary, camera</sub></td>
     <td align="center"><img src="./docs/images/web-app-feature-notes.png" width="160" alt="Handwritten list of web app features"><br><sub>Sketch: our handwritten feature list</sub></td>
-    <td align="center"><b>Photo needed:</b><br>wiring / mechanism close-up</td>
+    <td align="center"><a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link"><b>LEGO Mindstorms build photos</b></a><br><sub>on Google Drive</sub></td>
   </tr>
 </table>
 
@@ -65,10 +61,6 @@ the labels. This is a real run on our test clips:
 | tugging | "A grey Great Dane is mouthing a colorful rope toy on the rug… **no clear tug-of-war.**" |
 | eating | "Standing next to the food bowl… **likely just finished eating** rather than eating now." |
 | waiting at the door | "A corgi is lying on the doormat by the glass door looking outside." |
-
-| Previous model | Claude Opus 5.5 |
-|---|---|
-| TODO: run the same frames and moments on the previous model | Corrects the tracker (above); writes the diary using only listed moments, returning their IDs |
 
 **In the code:**
 - Vision on keyframes: [`caption_keyframes`](backend/laika/diary/claude.py#L114-L138).
@@ -168,6 +160,6 @@ The software was built with Claude Opus 5.5 at a Claude Opus Build Day.
 | Criterion | Evidence | Where |
 |---|---|---|
 | New capability | Opus 5.5 corrects the tracker from real frames and writes a diary grounded in logged moments | [New capability](#new-capability) |
-| It works | Real screen recording, 32 tests, honest live/mocked list; LEGO prototype photos pending | [See it work](#see-it-work), [Run it](#run-it) |
+| It works | Real screen recording, pitch video, LEGO prototype photos, 32 tests, honest live/mocked list | [See it work](#see-it-work), [Photos](#photos), [Run it](#run-it) |
 | Keep or share | A daily diary of your dog's day, and a way for your dog to ask | [Why](#why) |
 | Clarity of demo | Problem in one line, demo GIF on the first screen, input → Claude → result | [See it work](#see-it-work) |
