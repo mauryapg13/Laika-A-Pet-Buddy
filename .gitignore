@@ -2,3 +2,11 @@
 __pycache__/
 *.pyc
 .pytest_cache/
+
+# camera + diary
+.env
+.claude/
+out/
+models/
+data/videos/*.mp4
+.DS_Store
