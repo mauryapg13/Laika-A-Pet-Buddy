@@ -10,3 +10,7 @@ out/
 models/
 data/videos/*.mp4
 .DS_Store
+
+# web app (web/)
+node_modules
+dist
