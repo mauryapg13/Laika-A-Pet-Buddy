@@ -21,6 +21,6 @@
 
 **85–90 s: the link**
 
-> Try it at **TODO: hosted link**. Thank you.
+> It's all on GitHub: **github.com/mauryapg13/Laika-A-Pet-Buddy**. Thank you.
 
 ⏱ **Hard stop at 90 s.**

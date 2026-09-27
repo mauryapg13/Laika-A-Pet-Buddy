@@ -3,7 +3,6 @@
   <sub>Concept render. The working prototype is built with LEGO Mindstorms (<a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link">photos</a>).</sub>
   <h1>Laika: A Pet Buddy</h1>
   <p><b>Your dog can ask for a walk, a game or a treat, and tells you about its day.</b></p>
-  <a href="MISSING.md"><img src="https://img.shields.io/badge/Live_demo-TODO-lightgrey" alt="Live demo (link coming)"></a>
   <a href="https://drive.google.com/drive/folders/1tM4M4Gp0hgJtHhK0ji7wILBPc_LMXQQz?usp=drive_link"><img src="https://img.shields.io/badge/Watch-Video-ef4444" alt="Watch the demo video"></a>
   <a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link"><img src="https://img.shields.io/badge/See-Build_photos-56704f" alt="Build photos"></a>
   <img src="https://img.shields.io/badge/Built_with-Claude_Opus_5.5-d97757" alt="Built with Claude Opus 5.5">
@@ -123,8 +122,6 @@ cd web && npm install && npm run dev      # terminal 2: open http://localhost:51
 | `ANTHROPIC_WORKSPACE_ID` | only for org-level keys | Workspace to bill |
 | `LAIKA_MODEL` | no | Claude model (default `claude-opus-5-5`) |
 | `LAIKA_DETECTOR_MODEL` | no | Path to a different detector model |
-
-Hosted link live until: **TODO** (keep it up until at least 2026-10-27).
 
 <details>
 <summary>More commands and docs</summary>
