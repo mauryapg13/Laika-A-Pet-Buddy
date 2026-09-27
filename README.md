@@ -6,7 +6,9 @@ confirmations) as **JSON**, applies the product's safety and behaviour rules plu
 **full state of the hub as JSON**.
 
 - The **web app** (teammate) sends inputs and draws the hub from the output JSON.
-- The **camera AI** (teammate) sends detections such as `HUMAN_DETECTED`.
+- The **camera AI** ([`camera/`](camera/)) sends detections such as `HUMAN_DETECTED`, and the **diary**
+  ([`diary/`](diary/)) turns the day's camera footage and hub events into the dog's diary and an owner report.
+  See [section 12](#12-camera--diary).
 - The **hardware** (when connected) sends sensor inputs and carries out the `actions` in the output.
 
 > ▶ **Quick look:** watch [`demo/demo_video.mp4`](demo/demo_video.mp4) (36 s). It shows every story with the input JSON, the output JSON and the hub reacting.
@@ -26,6 +28,7 @@ confirmations) as **JSON**, applies the product's safety and behaviour rules plu
 9. [Integration guides](#9-integration-guides)
 10. [Project structure, tests, video](#10-project-structure-tests-video)
 11. [Known limitations](#11-known-limitations)
+12. [Camera + diary](#12-camera--diary)
 
 ---
 
@@ -486,8 +489,22 @@ Laika-A-Pet-Buddy/
 ├── docs/
 │   ├── PRD.md               product requirements document
 │   └── images/              the 6 story images (01_my_choice … 06_arrival_greeting)
+├── camera/                  OpenCV + YOLO: tracks the dog, spots people, labels behaviour (section 12)
+│   ├── vision.py            video → behaviour episodes, keyframes, human visits
+│   ├── detector.py          YOLO11n dog/person detector (OpenCV DNN, no torch)
+│   ├── config.py            zones + motion thresholds
+│   ├── calibrate.py         draws zones/grid on a frame to set up a camera
+│   └── synth_video.py       renders a cartoon test day with known ground truth
+├── diary/                   camera + hub events → the dog's diary (Claude) and the owner report
+│   ├── __main__.py          batch: `python -m diary <video>`
+│   ├── live.py              live demo: `python -m diary.live` (webcam + in-process Hub + live diary)
+│   ├── hub_events.py        Hub events → diary moments; simulated hub day; auto sensor confirm
+│   ├── claude.py            keyframe captions + strict, grounded diary writing (Claude API)
+│   └── owner_report.py      factual owner report (no LLM)
+├── data/videos/             test clips (*.mp4 not committed) + per-clip *.zones.json
 ├── tests/
-│   └── test_hub.py          23 tests: every feature, every safety rule, ML, HTTP API
+│   ├── test_hub.py          23 tests: every feature, every safety rule, ML, HTTP API
+│   └── test_diary.py        camera/diary ↔ hub integration tests
 ├── conftest.py              lets pytest import the packages from the project root
 └── requirements.txt
 ```
@@ -505,3 +522,87 @@ Laika-A-Pet-Buddy/
 - State is kept in memory; restarting the server starts a fresh day.
 - Single dog, single hub. Attachment detection is not automatic (the owner's `offer` sets the attachment).
 - Post-MVP extras from the product requirements (Together Mode, Scent Quest) are not included.
+
+---
+
+## 12. Camera + diary
+
+The camera watches the dog, the hub records what the dog does with it, and at the end of the day the dog "writes"
+a diary entry about it. The owner gets a separate factual report.
+
+```
+camera ──► camera/vision.py (2-3 snapshots/s)                 Laika Hub (device_model)
+            YOLO dog + person detection, MOG2 motion              ▲  camera inputs: HUMAN_DETECTED → greeting,
+            → behaviour episodes, keyframes, human visits ────────┘                  DOG_<BEHAVIOUR> labels
+                      │                                            │ events (tug reps, treats, walk requests,
+                      ▼                                            ▼  greetings, lockouts, ball rolls, tidy…)
+             diary/claude.py: one timeline → numbered "moments" → Claude writes the diary (only those moments)
+             diary/owner_report.py: camera + hub counters → factual report (no LLM)
+```
+
+### 12.1 Setup
+```bash
+pip install -r requirements.txt
+# Dog/person detector (10.9 MB, AGPL-3.0). Without it, tracking falls back to motion only.
+mkdir -p models && curl -L -o models/yolo11n.onnx \
+    https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.onnx
+# Claude: create .env with ANTHROPIC_API_KEY=... (plus ANTHROPIC_WORKSPACE_ID=... for org-level keys).
+# Optional: LAIKA_MODEL=claude-opus-5-5 (default claude-opus-5). Without a key you get plain fallback text.
+```
+
+### 12.2 Live demo (laptop camera)
+```bash
+python -m diary.live --name Biscuit          # open http://localhost:8765
+```
+- A real `Hub` runs in-process. The page's **Owner** buttons (offer tug / walk / ball / choice, N1, park) and
+  **Dog** buttons (pull strap, let go, boop, ball in pocket, toy in basket, choice ropes, music) send the same JSON
+  as `POST /input`. A simulated sensor confirms each output, the way the hardware will.
+- The camera sends `HUMAN_DETECTED` with the detector's confidence, so Laika's arrival greeting fires for real. Each
+  behaviour change is logged as a camera event (`DOG_TUGGING`, `DOG_SLEEPING`…).
+- Behaviour changes and hub events become diary moments. About every 12 seconds, Claude adds a short, feelings-first
+  line. **End of day** writes the whole-day entry, the real product deliverable, and saves the hub event log and
+  summary to `out/live_…/`.
+- Only a detected dog counts as the dog. People are masked out, so a person walking past is never tracked as the
+  dog. For a demo without a dog, add `--track-anything`. To rehearse without a camera, replay a clip:
+  `--source data/videos/<clip>.mp4`.
+
+### 12.3 Whole-day batch run
+```bash
+python -m camera.synth_video data/videos/synthetic_day.mp4           # cartoon test day with known ground truth
+python -m diary data/videos/synthetic_day.mp4 --name Biscuit --time-scale 280 --persona foodie
+```
+- Hub events come from `--hub-events events.json` (a list, e.g. saved from `GET /events`), from `--hub-url
+  http://localhost:5000` (a running `python -m api.server`), or, by default, from a real `Hub` driven through a
+  simulated day. That day lines up with the camera: tugging on camera becomes a tug round, waiting at the door
+  becomes a walk request, and people seen become `HUMAN_DETECTED`. `--persona foodie|athlete|diva` sets the habits.
+- Output goes to `out/<date>_<name>/`:
+  - `diary.html` / `diary.md`: the dog's diary.
+  - `report.html` / `report.md`: the owner report.
+  - `diary_moments.json`: the allowed moments, plus which ones Claude used.
+  - `hub_events.json`, `timeline.json`, `vision.json`, and `keyframes/`.
+- `--time-scale` stretches a short clip over a day. Use `--time-scale 1` for real footage and set `--start` to when
+  the recording began.
+
+### 12.4 How the diary stays honest
+- Code turns the merged timeline into a numbered list of plain moments, for example "pulled the bone tug" (×6,
+  morning), "the hub gave me a treat for a good tug round", "my human came home and the hub waved its ears hello", or
+  "no human came to see me". Claude only sees that list. It may skip or merge moments and add feelings, but it may
+  not add events. It returns the IDs of the moments it used.
+- "No human came" is only said for the stretch the camera actually watched, and only when the detector can see
+  people in that footage.
+- Keyframe captions (Claude vision, up to 12 per day in one call) check the tracker's labels. In the owner report
+  they appear as "Photo check".
+
+### 12.5 Camera details
+- Behaviours: `sleeping` · `resting` · `wandering` · `zoomies` · `playing` · `tugging` · `eating` ·
+  `waiting_at_door` · `away`. Zone-based ones (bowl, door, tug) need zones. Run
+  `python -m camera.calibrate <video> 5` and put the result in `<video>.zones.json`.
+- Speeds are measured in dog body lengths per second, so thresholds work for close-ups and wide shots alike. Net
+  travel over about 2 s separates walking from tugging in place.
+- A still dog fades into the MOG2 background, so an "empty room" reference tells a sleeping dog apart from one that
+  left. A dog that is already lying down when the video starts is backfilled once it moves.
+- Tested on:
+  - The synthetic day: all 9 scripted segments recovered.
+  - Three Pexels clips: dog at the bowl → `eating`, corgi at the door → `waiting_at_door`, two dogs with a rope toy →
+    `tugging`.
+
