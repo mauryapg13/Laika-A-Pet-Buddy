@@ -110,7 +110,8 @@ The full list of inputs, actions and gestures is in [hub.md §5–6](hub.md#5-js
 
 ## 5. Status
 
+- **Prototype:** the hardware prototype is built with **LEGO Mindstorms**. The design above is the target for the
+  production hub. [Build photos](https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link).
 - **Hardware work:** prototype development, hardware testing and integration are led by Ankit Kumar.
-- **Software:** it does not drive the physical prototype yet. It runs against the same JSON a real sensor bridge
-  would send; in demos, a simulated sensor confirms each output.
-- **Next step:** connecting the prototype means writing that bridge. The rules and the web app already work.
+- **Software link:** the software talks to hardware through the JSON inputs and actions above. In software-only demos,
+  a simulated sensor confirms each output.

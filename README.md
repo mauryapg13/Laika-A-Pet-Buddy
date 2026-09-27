@@ -1,188 +1,162 @@
-# Laika: A Pet Buddy
+<div align="center">
+  <img src="./docs/images/04_tug_treat_reward.jpeg" alt="Concept render of the Laika wall hub: a dog pulls the strap and a treat drops" width="100%">
+  <sub>Concept render. The working prototype is built with LEGO Mindstorms (<a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link">photos</a>).</sub>
+  <h1>Laika: A Pet Buddy</h1>
+  <p><b>Your dog can ask for a walk, a game or a treat, and tells you about its day.</b></p>
+  <a href="https://drive.google.com/drive/folders/1tM4M4Gp0hgJtHhK0ji7wILBPc_LMXQQz?usp=drive_link"><img src="https://img.shields.io/badge/Watch-Video-ef4444" alt="Watch the demo video"></a>
+  <a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link"><img src="https://img.shields.io/badge/See-Build_photos-56704f" alt="Build photos"></a>
+  <img src="https://img.shields.io/badge/Built_with-Claude_Opus_5.5-d97757" alt="Built with Claude Opus 5.5">
+  <img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT license">
+  <p><a href="#why">Why</a> · <a href="#see-it-work">Demo</a> · <a href="#photos">Photos</a> · <a href="#new-capability">New capability</a> · <a href="#how-it-works">How it works</a> · <a href="#run-it">Run it</a> · <a href="#team">Team</a></p>
+</div>
 
-A wall-mounted hub that lets a dog **ask** for things (a walk, play, rest, a treat) by pulling a strap, booping a
-pad or pressing a button. The hub answers with a treat, a rolled ball, a released harness or a wave of its ears.
-A camera watches over the dog, and every evening the dog "writes" a diary about its day.
+## Why
 
-![The hub in use: notice, pull, response, reward](docs/images/04_tug_treat_reward.jpeg)
+Dogs spend long days alone while their people are at work. They can't say "I'm bored" or "I need to go out", and
+owners come home not knowing how the day went. Laika is a soft friend on the wall that gives a dog a few simple
+ways to ask, and answers kindly every time. Each evening the owner reads a short diary, written in the dog's own
+voice, about what really happened.
 
-Laika is a physical device plus the software that runs it:
+## See it work
 
-- **The hub** is a soft, wall-mounted body with a central boop pad, two expressive ears, a camera, microphone and
-  speaker, and five modular nodes for straps, buttons and a treat/ball spout. See [Hardware](#hardware).
-- **The hub brain** (`laika.hub`) turns every pull, boop and button press into safe, predictable outcomes.
-  Harder pulls never win. Treats are capped and sensor-confirmed, and the harness is only released after the
-  owner says yes.
-- **The camera** (`laika.camera`) tracks the dog, spots people and labels behaviour (sleeping, tugging, zoomies,
-  waiting at the door…). When someone comes home, the hub waves its ears hello.
-- **The diary** (`laika.diary`) uses Claude to turn the day's camera footage and hub events into a short, warm diary
-  entry in the dog's voice. It may only mention things that actually happened. The owner also gets a separate,
-  factual report.
-- **The web app** (`web/`) is mobile-first: dashboard, live camera, diary, notifications and safety controls.
+**The problem:** a dog alone at home can't ask for anything, and its owner can't see how its day went.
 
-![The web app: home dashboard, live diary and camera view](docs/images/app-screens.jpg)
+<div align="center">
+  <img src="./docs/images/demo.gif" alt="Screen recording: the app shows Pablo tugging, then the diary writes itself live" width="300">
+  <br><sub>Real screen recording. The camera replays a test clip of dogs tugging; the hub counts a tug round and the diary writes itself.</sub>
+  <p><a href="https://drive.google.com/drive/folders/1tM4M4Gp0hgJtHhK0ji7wILBPc_LMXQQz?usp=drive_link"><img src="https://img.shields.io/badge/▶_Watch_the_full_demo-ef4444?style=for-the-badge" alt="Watch the full demo video"></a></p>
+</div>
 
-## Hardware
+**What just happened:**
+1. **Input:** the camera sees tugging, and six strap pulls reach the hub. Here they are sent as sensor JSON,
+   since the prototype isn't wired up yet.
+2. **What Claude did:** it looked at camera frames to check what the dog was really doing. Then it wrote diary
+   lines in the dog's voice, using only moments that were logged.
+3. **Result:** the owner's app shows "Pablo is tugging", 1 treat out of 8, and a live diary entry.
 
-The hub mounts on the wall. A rear chassis carries every pull into a structural wall plate, so the soft front shell
-never takes the load.
+## Photos
 
-| Part | What it does |
+**Build and team photos (LEGO Mindstorms prototype):** [Google Drive folder](https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link). **Pitch video:**
+[Google Drive](https://drive.google.com/drive/folders/1tM4M4Gp0hgJtHhK0ji7wILBPc_LMXQQz?usp=drive_link).
+
+<table>
+  <tr>
+    <td align="center"><img src="./docs/images/app-screens.jpg" width="260" alt="App screens: home, live diary, camera view"><br><sub>UI: home, live diary, camera</sub></td>
+    <td align="center"><img src="./docs/images/web-app-feature-notes.png" width="160" alt="Handwritten list of web app features"><br><sub>Sketch: our handwritten feature list</sub></td>
+    <td align="center"><a href="https://drive.google.com/drive/folders/1e16lcUlu3jW3edUiHe-E-F7ww_cGm2wC?usp=drive_link"><b>LEGO Mindstorms build photos</b></a><br><sub>on Google Drive</sub></td>
+  </tr>
+</table>
+
+## New capability
+
+**Claude Opus 5.5 checks the camera's guesses by looking at real, messy home-camera frames.** It then writes a warm
+diary that stays strictly to the facts, and reports which facts it used.
+
+A cheap motion tracker labels what the dog does. Claude Opus 5.5 reads a batch of keyframes in one call and corrects
+the labels. This is a real run on our test clips:
+
+| Tracker's guess | What Claude Opus 5.5 saw |
 |---|---|
-| **Boop pad** (centre) | Pressure-sensing pad with a light halo. One boop asks for a walk. |
-| **Ears** | Slow, torque-limited gestures: *available*, *success*, *hello*. They stop if obstructed. |
-| **Camera, mic, speaker** | See and hear the dog. The speaker plays quiet cues and calm music. |
-| **N1** (upper left) | Owner's **Yes** button: confirms a walk or a choice, or cues tidying. |
-| **N2** (upper right) | Dog-pressed button for calm audio. |
-| **N3** (left) | Ball pocket: drop the ball in, and it comes back out of N5. |
-| **N4** (lower right) | **Resistance node**: a motorised strap with a load sensor for tug, the harness, or choice tokens. |
-| **N5** (lower left) | **Output spout**: drops one treat or rolls the ball, with a sensor that confirms it happened. |
+| tugging | "A grey Great Dane is mouthing a colorful rope toy on the rug… **no clear tug-of-war.**" |
+| eating | "Standing next to the food bowl… **likely just finished eating** rather than eating now." |
+| waiting at the door | "A corgi is lying on the doormat by the glass door looking outside." |
 
-Attachments are swappable cartridges that identify themselves (type, revision, safety class, calibration).
+**In the code:**
+- Vision on keyframes: [`caption_keyframes`](backend/laika/diary/claude.py#L114-L138).
+- Grounded diary: facts become numbered moments in [`diary_moments`](backend/laika/diary/claude.py#L155), and
+  [`write_diary`](backend/laika/diary/claude.py#L232-L244) returns `used_moment_ids`.
+- Live lines while the day happens: [`live.py`](backend/laika/diary/live.py#L195).
 
-Safety is built into the hardware, not only the software:
-- slip protection that works with the power off;
-- retraction that stops on unexpected tension;
-- no pinch points;
-- washable food parts kept separate from the electronics;
-- a watchdog that stops the motors if control fails.
+## How it works
 
-The hardware talks to the software through JSON. Sensors post inputs such as
-`{"type":"pull","node":"N4","force":5.1,"duration_ms":600}`, and carry out the `actions` the hub returns
-(`dispense_treat`, `retract_strap`, `ear_wave`…).
+A wall hub turns the dog's pulls and boops into safe, predictable responses. A camera labels what the dog is doing.
+Claude checks the camera's frames and writes the diary. The owner's app shows it all live.
 
-Full details: [docs/hardware.md](docs/hardware.md).
-
-## Installation
-
-Requirements:
-- Python 3.10+
-- Node 18+ (only for the web app)
-- An [Anthropic API key](https://console.anthropic.com/) for the diary (optional; without one you get plain
-  fallback text)
-
-```bash
-git clone https://github.com/mauryapg13/Laika-A-Pet-Buddy.git
-cd Laika-A-Pet-Buddy
-python -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
-pip install -e "backend[dev]"
-cd web && npm install && cd ..
+```mermaid
+flowchart LR
+  Dog((Dog)) -- pull / boop / ball --> Hub[Laika hub<br>LEGO Mindstorms prototype]
+  Dog -. seen by .-> Cam[Camera<br>OpenCV + YOLO]
+  Hub -- JSON events --> Brain[Hub brain<br>safety rules]
+  Cam -- behaviour + keyframes --> Diary[Diary]
+  Brain -- events --> Diary
+  Diary -- keyframes + moments --> Claude[Claude Opus 5.5<br>vision + writing]
+  Claude -- captions + diary --> Diary
+  Brain -- treat / ball / harness / ears --> Hub
+  Diary --> App[Owner web app]
+  Brain --> App
 ```
 
-Two optional steps:
+| Layer | Tool | Why |
+|---|---|---|
+| Hardware | LEGO Mindstorms prototype ([design](docs/hardware.md)) | Fast to build and change: straps, buttons, spout |
+| Hub brain | Python ([`laika.hub`](backend/laika/hub/)) | Fixed safety rules: harder pulls never win, treats capped |
+| Camera | OpenCV + YOLO11n ([`laika.camera`](backend/laika/camera/)) | Runs on a laptop CPU, finds dogs and people |
+| AI | Claude Opus 5.5 ([`laika.diary`](backend/laika/diary/)) | Vision on keyframes, grounded diary writing |
+| API | Flask ([`laika.api`](backend/laika/api/)) | One back end for hub, camera and diary |
+| App | React + Vite ([`web/`](web/)) | Mobile-first owner app |
+
+## Run it
+
+**Works live:**
+- Hub rules and safety limits, through the JSON API.
+- Camera tracking (dog, people, behaviour) on a webcam or a replayed clip.
+- Claude vision captions and the diary, live and end-of-day.
+- Web app: dashboard, notifications, diary, camera tile, emergency stop.
+
+**Mocked:**
+- The software is not yet wired to the LEGO prototype. A simulated sensor confirms treats and balls.
+- In the app: node setup, Insights, Voice tracking, Profile.
 
 ```bash
-# Dog/person detector (10.9 MB, AGPL-3.0). Without it, the camera falls back to motion tracking only.
-mkdir -p models && curl -L -o models/yolo11n.onnx \
-    https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.onnx
-
-# Claude key for the diary. For an org-level key, also add ANTHROPIC_WORKSPACE_ID=...
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env
+git clone https://github.com/mauryapg13/Laika-A-Pet-Buddy.git && cd Laika-A-Pet-Buddy
+python -m venv .venv && source .venv/bin/activate && pip install -e "backend[dev]"
+mkdir -p models && curl -L -o models/yolo11n.onnx https://github.com/ultralytics/assets/releases/download/v8.3.0/yolo11n.onnx
+echo "ANTHROPIC_API_KEY=your-key" > .env
+laika-server --camera                     # terminal 1: http://localhost:5050
+cd web && npm install && npm run dev      # terminal 2: open http://localhost:5173
 ```
 
-## Usage
+| Variable | Needed | What it does |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | yes, for the diary | Claude API key |
+| `ANTHROPIC_WORKSPACE_ID` | only for org-level keys | Workspace to bill |
+| `LAIKA_MODEL` | no | Claude model (default `claude-opus-5-5`) |
+| `LAIKA_DETECTOR_MODEL` | no | Path to a different detector model |
 
-Run the back end and the web app in two terminals:
-
-```bash
-laika-server --camera          # hub + camera + diary on http://localhost:5050
-cd web && npm run dev                  # web app on http://localhost:5173
-```
-
-Open http://localhost:5173. On a phone on the same Wi-Fi, use the Network URL that Vite prints. The dashboard
-follows what the camera sees, the Diary tab fills in as the day goes on, and **Finish the day** writes the
-whole-day entry.
-
-With no dog around, add `--track-anything` so the camera treats whatever moves as the dog. With no camera, replay a
-clip: `--source path/to/clip.mp4`.
-
-No hardware yet? Act as the dog by sending the hub's JSON inputs. For example, six pulls on the tug strap earn a
-treat:
-
-```bash
-curl -X POST localhost:5050/input -H "Content-Type: application/json" -d '[
-  {"type":"owner","action":"offer","feature":"tug"},
-  {"type":"pull","node":"N4","force":5,"duration_ms":700}, {"type":"pull","node":"N4","force":5,"duration_ms":700},
-  {"type":"pull","node":"N4","force":5,"duration_ms":700}, {"type":"pull","node":"N4","force":5,"duration_ms":700},
-  {"type":"pull","node":"N4","force":5,"duration_ms":700}, {"type":"pull","node":"N4","force":5,"duration_ms":700}]'
-```
-
-The last response includes `"treats_today": 1`, and the diary gains a line about the treat.
-
-Other entry points:
+<details>
+<summary>More commands and docs</summary>
 
 | Command | What it does |
 |---|---|
-| `laika-server` | Hub API only (no camera) |
-| `laika-live` | Stand-alone camera + diary page with "be the dog" buttons (http://localhost:8765) |
-| `laika-diary <video>` | Whole-day diary + owner report from a recorded video |
-| `python backend/demo/run_demo.py` | Plays the hub's six feature stories in the terminal |
-| `pytest backend` | Runs the test suite |
+| `laika-server` | Hub API only |
+| `laika-live` | Camera + diary page with "be the dog" buttons |
+| `laika-diary <video>` | Whole-day diary and owner report from a video |
+| `python backend/demo/run_demo.py` | The hub's six feature stories |
+| `pytest backend` | 32 tests |
 
-### Project layout
+- [Hardware](docs/hardware.md), [hub reference](docs/hub.md), [camera and diary](docs/camera-and-diary.md),
+  [web app](web/README.md), [product requirements](docs/PRD.md).
+- License: [MIT](LICENSE). The optional YOLO11 model is AGPL-3.0 and not included.
+</details>
 
-```
-backend/                 Python back end (pip install -e backend)
-├── laika/
-│   ├── hub/             hub brain: node state machine, 6 features, safety rules, small ML
-│   ├── api/             HTTP API around the hub (+ camera and diary with --camera)
-│   ├── camera/          OpenCV + YOLO dog/person tracking → behaviour episodes
-│   └── diary/           hub + camera events → Claude diary, owner report, live mode
-├── demo/                scripted hub stories and explainer video
-├── tests/               pytest suite
-└── pyproject.toml       dependencies and the laika-* commands
-web/                     owner web app (React + Vite)
-docs/                    reference docs, product requirements, images
-data/videos/             camera zone files for the test clips
-```
+## Team
 
-### Documentation
+<table>
+  <tr>
+    <td align="center"><img src="https://github.com/Rohitkumartangudu.png" width="64" alt="Rohitkumartangudu"><br><b>Rohitkumartangudu</b><br><sub>Hub device model, API, demo</sub></td>
+    <td align="center"><img src="https://github.com/mkgdesign.png" width="64" alt="Mithravinda KG"><br><b>Mithravinda KG</b><br><sub>Web app design and frontend</sub></td>
+    <td align="center"><img src="https://github.com/mauryapg13.png" width="64" alt="Maurya PG"><br><b>Maurya PG</b><br><sub>Camera, diary, integration</sub></td>
+    <td align="center"><b>Ankit Kumar</b><br><sub>Prototype, design, pitch deck, hardware testing, integration</sub></td>
+  </tr>
+</table>
 
-- [Hardware](docs/hardware.md): body, boop pad, ears, the five nodes, sensors and actuators, safety, and how it talks to the software.
-- [Hub reference](docs/hub.md): nodes and buttons, the 6 features, safety rules, JSON inputs and outputs, HTTP API.
-- [Camera, diary and back end](docs/camera-and-diary.md): camera behaviours, how the diary stays honest, live mode
-  and batch runs.
-- [Web app](web/README.md): screens, and which data is live and which is mock.
-- [Product requirements](docs/PRD.md).
-- [Demo video](backend/demo/demo_video.mp4) (36 s): every hub story with its input and output JSON.
+The software was built with Claude Opus 5.5 at a Claude Opus Build Day.
 
-## Support
+## Rubric map
 
-Found a bug or have a question? [Open an issue](https://github.com/mauryapg13/Laika-A-Pet-Buddy/issues).
-
-## Roadmap
-
-- Connect the hardware prototype through a sensor bridge that posts the same JSON inputs; see
-  [hardware.md §4](docs/hardware.md#4-how-the-hardware-talks-to-the-software).
-- Align the web app's node setup screen with the hub's fixed nodes, then make it live.
-- Wire Insights to `GET /summary`, and add bark detection for Voice tracking.
-- Keep hub state across restarts. It is in memory today, so each restart starts a fresh day.
-- Retrain the ML parts on real activity logs instead of simulated days.
-
-## Contributing
-
-1. Create a branch and make your change.
-2. Run `pytest backend` and, for web changes, `cd web && npm run build`.
-3. Open a pull request into `main`.
-
-Safety limits live in [`backend/laika/hub/config.py`](backend/laika/hub/config.py). Change them there, never in ML code.
-
-## Authors
-
-- **Rohitkumartangudu**: hub device model, API and demo
-- **Mithravinda KG**: web app design and frontend
-- **Maurya PG**: camera, diary and integration
-- **Ankit Kumar**: prototype development, design, pitch deck, hardware testing, integration and iteration
-
-The product was built at a Claude Opus Build Day. Test clips are from [Pexels](https://www.pexels.com/), and the
-detector is [Ultralytics YOLO11](https://github.com/ultralytics/ultralytics).
-
-## License
-
-[MIT](LICENSE). The optional YOLO11 detector model (`models/yolo11n.onnx`, not included in this repository) is
-separately licensed under AGPL-3.0.
-
-## Project status
-
-Working prototype. The software runs end to end, and the hardware prototype is being built and tested. The two
-aren't connected yet (the software uses simulated sensors), and several web app screens still use mock data.
+| Criterion | Evidence | Where |
+|---|---|---|
+| New capability | Opus 5.5 corrects the tracker from real frames and writes a diary grounded in logged moments | [New capability](#new-capability) |
+| It works | Real screen recording, pitch video, LEGO prototype photos, 32 tests, honest live/mocked list | [See it work](#see-it-work), [Photos](#photos), [Run it](#run-it) |
+| Keep or share | A daily diary of your dog's day, and a way for your dog to ask | [Why](#why) |
+| Clarity of demo | Problem in one line, demo GIF on the first screen, input → Claude → result | [See it work](#see-it-work) |
