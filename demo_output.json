@@ -1,0 +1,3403 @@
+{
+  "steps": [
+    {
+      "story": "1. My Choice (Learn / Choose / Confirm / Go)",
+      "step": "Owner clips the 3 choice tokens",
+      "input": {
+        "type": "owner",
+        "action": "offer",
+        "feature": "choice"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:05",
+        "device_state": "ONLINE",
+        "mode": "choice",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "choice_tokens",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": {
+          "C_LEFT": {
+            "token": "blue_rope",
+            "meaning": "OUTSIDE",
+            "light": false
+          },
+          "C_CENTER": {
+            "token": "paw_strap",
+            "meaning": "REST",
+            "light": false
+          },
+          "C_RIGHT": {
+            "token": "yellow_ring",
+            "meaning": "PLAY",
+            "light": false
+          }
+        },
+        "ears": "small_open",
+        "halo": "soft_on",
+        "actions": [
+          {
+            "do": "extend_strap",
+            "node": "N4",
+            "attachment": "choice_tokens"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 1,
+            "ts": "2026-09-27T10:00:05",
+            "event": "FEATURE_OFFERED",
+            "mode": "choice",
+            "feature": "choice"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "1. My Choice (Learn / Choose / Confirm / Go)",
+      "step": "Dog pulls the blue rope (OUTSIDE)",
+      "input": {
+        "type": "pull",
+        "node": "C_LEFT",
+        "force": 4.2,
+        "duration_ms": 700
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:10",
+        "device_state": "ONLINE",
+        "mode": "choice",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "WAITING_CONFIRM"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "choice_tokens",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": {
+          "C_LEFT": {
+            "token": "blue_rope",
+            "meaning": "OUTSIDE",
+            "light": true
+          },
+          "C_CENTER": {
+            "token": "paw_strap",
+            "meaning": "REST",
+            "light": false
+          },
+          "C_RIGHT": {
+            "token": "yellow_ring",
+            "meaning": "PLAY",
+            "light": false
+          }
+        },
+        "ears": "one_ear_lift",
+        "halo": "success",
+        "actions": [
+          {
+            "do": "light_slot",
+            "node": "C_LEFT"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 2,
+            "ts": "2026-09-27T10:00:10",
+            "event": "PULL_START",
+            "mode": "choice",
+            "node": "C_LEFT",
+            "force_peak": 4.2,
+            "pull_duration": 700.0
+          },
+          {
+            "event_id": 3,
+            "ts": "2026-09-27T10:00:10",
+            "event": "REQUEST_CREATED",
+            "mode": "choice",
+            "request": "choice",
+            "choice": "OUTSIDE",
+            "node": "C_LEFT"
+          }
+        ],
+        "notifications": [
+          "10:00 Dog selected OUTSIDE. Press N1 to confirm."
+        ],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "1. My Choice (Learn / Choose / Confirm / Go)",
+      "step": "Dog also tugs the yellow ring",
+      "input": {
+        "type": "pull",
+        "node": "C_RIGHT",
+        "force": 4.0,
+        "duration_ms": 600
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:15",
+        "device_state": "ONLINE",
+        "mode": "choice",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "WAITING_CONFIRM"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "choice_tokens",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": {
+          "C_LEFT": {
+            "token": "blue_rope",
+            "meaning": "OUTSIDE",
+            "light": true
+          },
+          "C_CENTER": {
+            "token": "paw_strap",
+            "meaning": "REST",
+            "light": false
+          },
+          "C_RIGHT": {
+            "token": "yellow_ring",
+            "meaning": "PLAY",
+            "light": false
+          }
+        },
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 4,
+            "ts": "2026-09-27T10:00:15",
+            "event": "PULL_START",
+            "mode": "choice",
+            "node": "C_RIGHT",
+            "force_peak": 4.0,
+            "pull_duration": 600.0
+          },
+          {
+            "event_id": 5,
+            "ts": "2026-09-27T10:00:15",
+            "event": "INPUT_IGNORED",
+            "mode": "choice",
+            "detail": "choice already made in this window",
+            "node": "C_RIGHT"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "1. My Choice (Learn / Choose / Confirm / Go)",
+      "step": "Owner presses N1 (Yes)",
+      "input": {
+        "type": "button",
+        "node": "N1"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:20",
+        "device_state": "ONLINE",
+        "mode": "choice",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "choice_tokens",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": {
+          "C_LEFT": {
+            "token": "blue_rope",
+            "meaning": "OUTSIDE",
+            "light": false
+          },
+          "C_CENTER": {
+            "token": "paw_strap",
+            "meaning": "REST",
+            "light": false
+          },
+          "C_RIGHT": {
+            "token": "yellow_ring",
+            "meaning": "PLAY",
+            "light": false
+          }
+        },
+        "ears": "wave",
+        "halo": "success",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 6,
+            "ts": "2026-09-27T10:00:20",
+            "event": "HUMAN_CONFIRMED",
+            "mode": "choice",
+            "request": "choice",
+            "choice": "OUTSIDE",
+            "node": "N1",
+            "detail": "owner confirmed OUTSIDE"
+          }
+        ],
+        "notifications": [
+          "10:00 Owner confirmed OUTSIDE."
+        ],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "1. My Choice (Learn / Choose / Confirm / Go)",
+      "step": "Owner parks the tokens",
+      "input": {
+        "type": "owner",
+        "action": "park"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:25",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "slow_down",
+        "halo": "off",
+        "actions": [
+          {
+            "do": "retract_strap",
+            "node": "N4"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 7,
+            "ts": "2026-09-27T10:00:25",
+            "event": "SESSION_ENDED",
+            "mode": "choice",
+            "feature": "choice",
+            "detail": "owner parked"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "2. Roll Again (Bring / Drop / Roll / Again)",
+      "step": "Owner offers Roll Again",
+      "input": {
+        "type": "owner",
+        "action": "offer",
+        "feature": "roll"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:30",
+        "device_state": "ONLINE",
+        "mode": "roll",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "ACTIVE"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "small_open",
+        "halo": "soft_on",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 8,
+            "ts": "2026-09-27T10:00:30",
+            "event": "FEATURE_OFFERED",
+            "mode": "roll",
+            "feature": "roll"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "2. Roll Again (Bring / Drop / Roll / Again)",
+      "step": "Dog drops ball in the N3 pocket",
+      "input": {
+        "type": "ball_in"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:35",
+        "device_state": "ONLINE",
+        "mode": "roll",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "ACTIVE"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "BUSY"
+          }
+        },
+        "choice_slots": null,
+        "ears": "wave",
+        "halo": "off",
+        "actions": [
+          {
+            "do": "roll_ball",
+            "node": "N5"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 9,
+            "ts": "2026-09-27T10:00:35",
+            "event": "BALL_RETURNED",
+            "mode": "roll",
+            "node": "N3"
+          },
+          {
+            "event_id": 10,
+            "ts": "2026-09-27T10:00:35",
+            "event": "OUTPUT_REQUESTED",
+            "mode": "roll",
+            "output": "roll",
+            "node": "N5"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "2. Roll Again (Bring / Drop / Roll / Again)",
+      "step": "N5 spout confirms ball rolled",
+      "input": {
+        "type": "output_confirmed",
+        "node": "N5"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:40",
+        "device_state": "ONLINE",
+        "mode": "roll",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "ACTIVE"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 11,
+            "ts": "2026-09-27T10:00:40",
+            "event": "OUTPUT_CONFIRMED",
+            "mode": "roll",
+            "output": "roll",
+            "node": "N5"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 1,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "2. Roll Again (Bring / Drop / Roll / Again)",
+      "step": "Dog brings it back again",
+      "input": {
+        "type": "ball_in"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:45",
+        "device_state": "ONLINE",
+        "mode": "roll",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "ACTIVE"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "BUSY"
+          }
+        },
+        "choice_slots": null,
+        "ears": "wave",
+        "halo": "off",
+        "actions": [
+          {
+            "do": "roll_ball",
+            "node": "N5"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 12,
+            "ts": "2026-09-27T10:00:45",
+            "event": "BALL_RETURNED",
+            "mode": "roll",
+            "node": "N3"
+          },
+          {
+            "event_id": 13,
+            "ts": "2026-09-27T10:00:45",
+            "event": "OUTPUT_REQUESTED",
+            "mode": "roll",
+            "output": "roll",
+            "node": "N5"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 1,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "2. Roll Again (Bring / Drop / Roll / Again)",
+      "step": "N5 spout confirms ball rolled",
+      "input": {
+        "type": "output_confirmed",
+        "node": "N5"
+      },
+      "output": {
+        "ts": "2026-09-27T10:00:50",
+        "device_state": "ONLINE",
+        "mode": "roll",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "ACTIVE"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 14,
+            "ts": "2026-09-27T10:00:50",
+            "event": "OUTPUT_CONFIRMED",
+            "mode": "roll",
+            "output": "roll",
+            "node": "N5"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 2,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "2. Roll Again (Bring / Drop / Roll / Again)",
+      "step": "Dog stops playing (3 min pass)",
+      "input": {
+        "type": "tick"
+      },
+      "output": {
+        "ts": "2026-09-27T10:03:50",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "slow_down",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 15,
+            "ts": "2026-09-27T10:03:50",
+            "event": "SESSION_ENDED",
+            "mode": "roll",
+            "feature": "roll",
+            "detail": "idle timeout"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "3. Tidy Together (Cue / Fetch / Drop / Proud)",
+      "step": "Owner presses N1 (cue)",
+      "input": {
+        "type": "button",
+        "node": "N1"
+      },
+      "output": {
+        "ts": "2026-09-27T10:03:55",
+        "device_state": "ONLINE",
+        "mode": "tidy",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "small_open",
+        "halo": "soft_on",
+        "actions": [
+          {
+            "do": "play_sound",
+            "sound": "tidy_cue"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 16,
+            "ts": "2026-09-27T10:03:55",
+            "event": "FEATURE_OFFERED",
+            "mode": "tidy",
+            "feature": "tidy"
+          },
+          {
+            "event_id": 17,
+            "ts": "2026-09-27T10:03:55",
+            "event": "TIDY_CUE",
+            "mode": "tidy",
+            "node": "N1"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "3. Tidy Together (Cue / Fetch / Drop / Proud)",
+      "step": "Dog drops a toy in the basket",
+      "input": {
+        "type": "toy_in_basket"
+      },
+      "output": {
+        "ts": "2026-09-27T10:04:00",
+        "device_state": "ONLINE",
+        "mode": "tidy",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "wave",
+        "halo": "glow",
+        "actions": [
+          {
+            "do": "play_sound",
+            "sound": "success"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 18,
+            "ts": "2026-09-27T10:04:00",
+            "event": "TIDY_DEPOSIT",
+            "mode": "tidy",
+            "detail": "toy 1"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 1
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "3. Tidy Together (Cue / Fetch / Drop / Proud)",
+      "step": "Dog drops another toy",
+      "input": {
+        "type": "toy_in_basket"
+      },
+      "output": {
+        "ts": "2026-09-27T10:04:05",
+        "device_state": "ONLINE",
+        "mode": "tidy",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "wave",
+        "halo": "glow",
+        "actions": [
+          {
+            "do": "play_sound",
+            "sound": "success"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 19,
+            "ts": "2026-09-27T10:04:05",
+            "event": "TIDY_DEPOSIT",
+            "mode": "tidy",
+            "detail": "toy 2"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 2
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "3. Tidy Together (Cue / Fetch / Drop / Proud)",
+      "step": "Window ends (2 min)",
+      "input": {
+        "type": "tick"
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:15",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "slow_down",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 20,
+            "ts": "2026-09-27T10:06:15",
+            "event": "SESSION_ENDED",
+            "mode": "tidy",
+            "feature": "tidy",
+            "detail": "tidy window over"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Tug offered to keep the dog active",
+      "input": {
+        "type": "owner",
+        "action": "offer",
+        "feature": "tug"
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:20",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "bone_tug",
+            "resistance": 1
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "small_open",
+        "halo": "soft_on",
+        "actions": [
+          {
+            "do": "extend_strap",
+            "node": "N4",
+            "attachment": "bone_tug"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 21,
+            "ts": "2026-09-27T10:06:20",
+            "event": "FEATURE_OFFERED",
+            "mode": "tug",
+            "feature": "tug"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog pulls the bone (rep 1)",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 4.8,
+        "duration_ms": 650
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:25",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 1
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 22,
+            "ts": "2026-09-27T10:06:25",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 4.8,
+            "pull_duration": 650.0
+          },
+          {
+            "event_id": 23,
+            "ts": "2026-09-27T10:06:25",
+            "event": "SESSION_STARTED",
+            "mode": "tug",
+            "feature": "tug"
+          },
+          {
+            "event_id": 24,
+            "ts": "2026-09-27T10:06:25",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 4.8,
+            "rep": 1
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 1,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog pulls the bone (rep 2)",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 5.1,
+        "duration_ms": 650
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:30",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 2
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 25,
+            "ts": "2026-09-27T10:06:30",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 5.1,
+            "pull_duration": 650.0
+          },
+          {
+            "event_id": 26,
+            "ts": "2026-09-27T10:06:30",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 5.1,
+            "rep": 2
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 2,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog pulls the bone (rep 3)",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 5.4,
+        "duration_ms": 650
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:35",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 2
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 27,
+            "ts": "2026-09-27T10:06:35",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 5.4,
+            "pull_duration": 650.0
+          },
+          {
+            "event_id": 28,
+            "ts": "2026-09-27T10:06:35",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 5.4,
+            "rep": 3
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 3,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.0,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog pulls the bone (rep 4)",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 5.7,
+        "duration_ms": 650
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:40",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 3
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 29,
+            "ts": "2026-09-27T10:06:40",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 5.7,
+            "pull_duration": 650.0
+          },
+          {
+            "event_id": 30,
+            "ts": "2026-09-27T10:06:40",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 5.7,
+            "rep": 4
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 4,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.89,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog pulls the bone (rep 5)",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 6.0,
+        "duration_ms": 650
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:45",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 3
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 31,
+            "ts": "2026-09-27T10:06:45",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 6.0,
+            "pull_duration": 650.0
+          },
+          {
+            "event_id": 32,
+            "ts": "2026-09-27T10:06:45",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 6.0,
+            "rep": 5
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 5,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 3.96,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog pulls the bone (rep 6)",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 6.3,
+        "duration_ms": 650
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:50",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "COOLDOWN",
+            "attachment": "bone_tug",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "BUSY"
+          }
+        },
+        "choice_slots": null,
+        "ears": "one_ear_lift",
+        "halo": "rhythm",
+        "actions": [
+          {
+            "do": "dispense_treat",
+            "node": "N5"
+          },
+          {
+            "do": "taper_resistance",
+            "node": "N4"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 33,
+            "ts": "2026-09-27T10:06:50",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 6.3,
+            "pull_duration": 650.0
+          },
+          {
+            "event_id": 34,
+            "ts": "2026-09-27T10:06:50",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 6.3,
+            "rep": 6
+          },
+          {
+            "event_id": 35,
+            "ts": "2026-09-27T10:06:50",
+            "event": "OUTPUT_REQUESTED",
+            "mode": "tug",
+            "output": "treat",
+            "node": "N5"
+          },
+          {
+            "event_id": 36,
+            "ts": "2026-09-27T10:06:50",
+            "event": "SESSION_COOLDOWN",
+            "mode": "tug",
+            "detail": "treat earned"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 0,
+          "treats_last_hour": 0,
+          "treats_limit_day": 8,
+          "tug_reps": 6,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Treat sensor confirms drop",
+      "input": {
+        "type": "output_confirmed",
+        "node": "N5"
+      },
+      "output": {
+        "ts": "2026-09-27T10:06:55",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "COOLDOWN",
+            "attachment": "bone_tug",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 37,
+            "ts": "2026-09-27T10:06:55",
+            "event": "OUTPUT_CONFIRMED",
+            "mode": "tug",
+            "output": "treat",
+            "node": "N5"
+          }
+        ],
+        "notifications": [
+          "10:06 Dog completed a tug round and got a treat (1/8 today)."
+        ],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 6,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog lets go -> strap retracts",
+      "input": {
+        "type": "release",
+        "node": "N4"
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:00",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "slow_down",
+        "halo": "off",
+        "actions": [
+          {
+            "do": "retract_strap",
+            "node": "N4",
+            "speed": "slow"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 38,
+            "ts": "2026-09-27T10:07:00",
+            "event": "PULL_RELEASE",
+            "mode": "tug",
+            "detail": "strap retracted"
+          },
+          {
+            "event_id": 39,
+            "ts": "2026-09-27T10:07:00",
+            "event": "SESSION_ENDED",
+            "mode": "tug",
+            "feature": "tug",
+            "detail": "tug round complete"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "4. Tug -> Treat (Notice / Pull / Response / Reward)",
+      "step": "Dog pulls parked strap very hard",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 11.0,
+        "duration_ms": 900
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:05",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "IDLE"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 40,
+            "ts": "2026-09-27T10:07:05",
+            "event": "PULL_START",
+            "mode": "idle",
+            "node": "N4",
+            "force_peak": 11.0,
+            "pull_duration": 900.0
+          },
+          {
+            "event_id": 41,
+            "ts": "2026-09-27T10:07:05",
+            "event": "INPUT_IGNORED",
+            "mode": "idle",
+            "detail": "strap parked - pull has no effect",
+            "node": "N4"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "5. Walk request (Ready / Request / Together / Let's go)",
+      "step": "Owner clips the harness on N4",
+      "input": {
+        "type": "owner",
+        "action": "offer",
+        "feature": "walk"
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:10",
+        "device_state": "ONLINE",
+        "mode": "walk",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "ENABLED"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "harness",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "small_open",
+        "halo": "soft_on",
+        "actions": [
+          {
+            "do": "extend_strap",
+            "node": "N4",
+            "attachment": "harness"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 42,
+            "ts": "2026-09-27T10:07:10",
+            "event": "FEATURE_OFFERED",
+            "mode": "walk",
+            "feature": "walk"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "5. Walk request (Ready / Request / Together / Let's go)",
+      "step": "Dog boops the pad",
+      "input": {
+        "type": "boop",
+        "duration_ms": 300
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:15",
+        "device_state": "ONLINE",
+        "mode": "walk",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "WAITING_CONFIRM"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "harness",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "one_ear_lift",
+        "halo": "success",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 43,
+            "ts": "2026-09-27T10:07:15",
+            "event": "BOOP",
+            "mode": "walk",
+            "pull_duration": 300
+          },
+          {
+            "event_id": 44,
+            "ts": "2026-09-27T10:07:15",
+            "event": "REQUEST_CREATED",
+            "mode": "walk",
+            "request": "walk",
+            "node": "BOOP"
+          }
+        ],
+        "notifications": [
+          "10:07 Dog requested a walk. Press N1 (Yes) to release the harness."
+        ],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "5. Walk request (Ready / Request / Together / Let's go)",
+      "step": "Dog boops again (impatient)",
+      "input": {
+        "type": "boop",
+        "duration_ms": 300
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:20",
+        "device_state": "ONLINE",
+        "mode": "walk",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "WAITING_CONFIRM"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "harness",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 45,
+            "ts": "2026-09-27T10:07:20",
+            "event": "BOOP",
+            "mode": "walk",
+            "pull_duration": 300
+          },
+          {
+            "event_id": 46,
+            "ts": "2026-09-27T10:07:20",
+            "event": "INPUT_IGNORED",
+            "mode": "walk",
+            "detail": "walk request already sent - cooldown",
+            "node": "BOOP"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "5. Walk request (Ready / Request / Together / Let's go)",
+      "step": "Owner presses N1 (Yes)",
+      "input": {
+        "type": "button",
+        "node": "N1"
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:25",
+        "device_state": "ONLINE",
+        "mode": "walk",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "harness",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "wave",
+        "halo": "warm_pulse",
+        "actions": [
+          {
+            "do": "release_harness",
+            "node": "N4"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 47,
+            "ts": "2026-09-27T10:07:25",
+            "event": "HUMAN_CONFIRMED",
+            "mode": "walk",
+            "request": "walk",
+            "node": "N1"
+          },
+          {
+            "event_id": 48,
+            "ts": "2026-09-27T10:07:25",
+            "event": "OUTPUT_REQUESTED",
+            "mode": "walk",
+            "output": "harness",
+            "node": "N4"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "5. Walk request (Ready / Request / Together / Let's go)",
+      "step": "Harness drop confirmed",
+      "input": {
+        "type": "output_confirmed",
+        "node": "N4"
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:30",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "slow_down",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 49,
+            "ts": "2026-09-27T10:07:30",
+            "event": "OUTPUT_CONFIRMED",
+            "mode": "walk",
+            "output": "harness",
+            "node": "N4"
+          },
+          {
+            "event_id": 50,
+            "ts": "2026-09-27T10:07:30",
+            "event": "SESSION_ENDED",
+            "mode": "walk",
+            "feature": "walk",
+            "detail": "walk started"
+          }
+        ],
+        "notifications": [
+          "10:07 Harness released onto the mat. Enjoy the walk!"
+        ],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "6. Arrival greeting (Wait / Arrival detected / Greet)",
+      "step": "Camera: human, low confidence",
+      "input": {
+        "type": "camera",
+        "event": "HUMAN_DETECTED",
+        "confidence": 0.45
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:35",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 51,
+            "ts": "2026-09-27T10:07:35",
+            "event": "CAMERA_EVENT",
+            "mode": "idle",
+            "camera_event": "HUMAN_DETECTED",
+            "confidence": 0.45
+          },
+          {
+            "event_id": 52,
+            "ts": "2026-09-27T10:07:35",
+            "event": "INPUT_IGNORED",
+            "mode": "idle",
+            "detail": "low confidence 0.45"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "6. Arrival greeting (Wait / Arrival detected / Greet)",
+      "step": "Camera: human detected",
+      "input": {
+        "type": "camera",
+        "event": "HUMAN_DETECTED",
+        "confidence": 0.93
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:40",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "wave",
+        "halo": "warm_pulse",
+        "actions": [
+          {
+            "do": "ear_wave",
+            "repeat": 1,
+            "speed": "slow"
+          },
+          {
+            "do": "halo_pulse",
+            "color": "warm",
+            "repeat": 1
+          }
+        ],
+        "events": [
+          {
+            "event_id": 53,
+            "ts": "2026-09-27T10:07:40",
+            "event": "CAMERA_EVENT",
+            "mode": "idle",
+            "camera_event": "HUMAN_DETECTED",
+            "confidence": 0.93
+          },
+          {
+            "event_id": 54,
+            "ts": "2026-09-27T10:07:40",
+            "event": "GREETING",
+            "mode": "idle",
+            "detail": "human detected (0.93)"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "6. Arrival greeting (Wait / Arrival detected / Greet)",
+      "step": "Hub returns to rest",
+      "input": {
+        "type": "tick"
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:45",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [],
+        "events": [],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Dog presses N2",
+      "input": {
+        "type": "button",
+        "node": "N2"
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:50",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "ON"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "one_ear_lift",
+        "halo": "soft_on",
+        "actions": [
+          {
+            "do": "audio_start",
+            "track": "calm_enrichment",
+            "max_volume": 40
+          }
+        ],
+        "events": [
+          {
+            "event_id": 55,
+            "ts": "2026-09-27T10:07:50",
+            "event": "AUDIO_ON",
+            "mode": "idle",
+            "node": "N2",
+            "detail": "dog pressed N2"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Dog presses N2 again",
+      "input": {
+        "type": "button",
+        "node": "N2"
+      },
+      "output": {
+        "ts": "2026-09-27T10:07:55",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "PARKED",
+            "attachment": null,
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "neutral",
+        "halo": "off",
+        "actions": [
+          {
+            "do": "audio_stop"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 56,
+            "ts": "2026-09-27T10:07:55",
+            "event": "AUDIO_OFF",
+            "mode": "idle",
+            "node": "N2",
+            "detail": "dog pressed N2"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Tug offered",
+      "input": {
+        "type": "owner",
+        "action": "offer",
+        "feature": "tug"
+      },
+      "output": {
+        "ts": "2026-09-27T10:08:00",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "READY",
+            "attachment": "bone_tug",
+            "resistance": 1
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "small_open",
+        "halo": "soft_on",
+        "actions": [
+          {
+            "do": "extend_strap",
+            "node": "N4",
+            "attachment": "bone_tug"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 57,
+            "ts": "2026-09-27T10:08:00",
+            "event": "FEATURE_OFFERED",
+            "mode": "tug",
+            "feature": "tug"
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Frantic hard pull 1",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 15,
+        "duration_ms": 400
+      },
+      "output": {
+        "ts": "2026-09-27T10:08:03",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 1
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 58,
+            "ts": "2026-09-27T10:08:03",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "pull_duration": 400.0
+          },
+          {
+            "event_id": 59,
+            "ts": "2026-09-27T10:08:03",
+            "event": "SESSION_STARTED",
+            "mode": "tug",
+            "feature": "tug"
+          },
+          {
+            "event_id": 60,
+            "ts": "2026-09-27T10:08:03",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "rep": 1
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 1,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Frantic hard pull 2",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 15,
+        "duration_ms": 400
+      },
+      "output": {
+        "ts": "2026-09-27T10:08:06",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 2
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 61,
+            "ts": "2026-09-27T10:08:06",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "pull_duration": 400.0
+          },
+          {
+            "event_id": 62,
+            "ts": "2026-09-27T10:08:06",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "rep": 2
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 2,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Frantic hard pull 3",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 15,
+        "duration_ms": 400
+      },
+      "output": {
+        "ts": "2026-09-27T10:08:09",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 2
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 63,
+            "ts": "2026-09-27T10:08:09",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "pull_duration": 400.0
+          },
+          {
+            "event_id": 64,
+            "ts": "2026-09-27T10:08:09",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "rep": 3
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 3,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Frantic hard pull 4",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 15,
+        "duration_ms": 400
+      },
+      "output": {
+        "ts": "2026-09-27T10:08:12",
+        "device_state": "ONLINE",
+        "mode": "tug",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "ACTIVE",
+            "attachment": "bone_tug",
+            "resistance": 3
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "rhythm",
+        "halo": "rhythm",
+        "actions": [],
+        "events": [
+          {
+            "event_id": 65,
+            "ts": "2026-09-27T10:08:12",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "pull_duration": 400.0
+          },
+          {
+            "event_id": 66,
+            "ts": "2026-09-27T10:08:12",
+            "event": "PULL_VALID",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "rep": 4
+          }
+        ],
+        "notifications": [],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 4,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": null,
+          "suggestion": null
+        }
+      }
+    },
+    {
+      "story": "Extra: N2 audio + safety guard",
+      "step": "Frantic hard pull 5",
+      "input": {
+        "type": "pull",
+        "node": "N4",
+        "force": 15,
+        "duration_ms": 400
+      },
+      "output": {
+        "ts": "2026-09-27T10:08:15",
+        "device_state": "ONLINE",
+        "mode": "idle",
+        "nodes": {
+          "BOOP": {
+            "role": "walk_request",
+            "state": "COOLDOWN"
+          },
+          "N1": {
+            "role": "owner_confirm",
+            "state": "IDLE"
+          },
+          "N2": {
+            "role": "audio",
+            "state": "OFF"
+          },
+          "N3": {
+            "role": "ball_pocket",
+            "state": "PARKED"
+          },
+          "N4": {
+            "role": "strap",
+            "state": "LOCKOUT",
+            "attachment": "bone_tug",
+            "resistance": 0
+          },
+          "N5": {
+            "role": "output",
+            "state": "IDLE"
+          }
+        },
+        "choice_slots": null,
+        "ears": "slow_down",
+        "halo": "off",
+        "actions": [
+          {
+            "do": "taper_resistance",
+            "node": "N4"
+          },
+          {
+            "do": "retract_strap_after_release",
+            "node": "N4"
+          }
+        ],
+        "events": [
+          {
+            "event_id": 67,
+            "ts": "2026-09-27T10:08:15",
+            "event": "PULL_START",
+            "mode": "tug",
+            "node": "N4",
+            "force_peak": 15.0,
+            "pull_duration": 400.0
+          },
+          {
+            "event_id": 68,
+            "ts": "2026-09-27T10:08:15",
+            "event": "SESSION_LOCKED_OUT",
+            "mode": "idle",
+            "detail": "5 high-force pulls within 20 s"
+          }
+        ],
+        "notifications": [
+          "10:08 5 high-force pulls occurred within 20 seconds. Strap locked for 10 min."
+        ],
+        "counters": {
+          "treats_today": 1,
+          "treats_last_hour": 1,
+          "treats_limit_day": 8,
+          "tug_reps": 0,
+          "rolls_session": 0,
+          "toys_tidied_session": 0
+        },
+        "ml": {
+          "pull_threshold_n": 4.03,
+          "anomaly": "Unusual hour: pulls 10 (normal ~4.0), ignored 4 (normal ~0.8)",
+          "suggestion": null
+        }
+      }
+    }
+  ],
+  "summary": {
+    "day": "2026-09-27",
+    "counts": {
+      "boops": 2,
+      "valid_pulls": 10,
+      "ignored_inputs": 4,
+      "treats_confirmed": 1,
+      "balls_rolled": 2,
+      "harness_releases": 1,
+      "requests": 2,
+      "toys_tidied": 2,
+      "greetings": 1,
+      "lockouts": 1,
+      "output_failures": 0
+    },
+    "timeline": [
+      {
+        "time": "10:00",
+        "event": "REQUEST_CREATED",
+        "detail": ""
+      },
+      {
+        "time": "10:00",
+        "event": "HUMAN_CONFIRMED",
+        "detail": "owner confirmed OUTSIDE"
+      },
+      {
+        "time": "10:00",
+        "event": "SESSION_ENDED",
+        "detail": "owner parked"
+      },
+      {
+        "time": "10:00",
+        "event": "OUTPUT_CONFIRMED",
+        "detail": ""
+      },
+      {
+        "time": "10:00",
+        "event": "OUTPUT_CONFIRMED",
+        "detail": ""
+      },
+      {
+        "time": "10:03",
+        "event": "SESSION_ENDED",
+        "detail": "idle timeout"
+      },
+      {
+        "time": "10:04",
+        "event": "TIDY_DEPOSIT",
+        "detail": "toy 1"
+      },
+      {
+        "time": "10:04",
+        "event": "TIDY_DEPOSIT",
+        "detail": "toy 2"
+      },
+      {
+        "time": "10:06",
+        "event": "SESSION_ENDED",
+        "detail": "tidy window over"
+      },
+      {
+        "time": "10:06",
+        "event": "SESSION_STARTED",
+        "detail": ""
+      },
+      {
+        "time": "10:06",
+        "event": "OUTPUT_CONFIRMED",
+        "detail": ""
+      },
+      {
+        "time": "10:07",
+        "event": "SESSION_ENDED",
+        "detail": "tug round complete"
+      },
+      {
+        "time": "10:07",
+        "event": "REQUEST_CREATED",
+        "detail": ""
+      },
+      {
+        "time": "10:07",
+        "event": "HUMAN_CONFIRMED",
+        "detail": ""
+      },
+      {
+        "time": "10:07",
+        "event": "OUTPUT_CONFIRMED",
+        "detail": ""
+      },
+      {
+        "time": "10:07",
+        "event": "SESSION_ENDED",
+        "detail": "walk started"
+      },
+      {
+        "time": "10:07",
+        "event": "GREETING",
+        "detail": "human detected (0.93)"
+      },
+      {
+        "time": "10:07",
+        "event": "AUDIO_ON",
+        "detail": "dog pressed N2"
+      },
+      {
+        "time": "10:07",
+        "event": "AUDIO_OFF",
+        "detail": "dog pressed N2"
+      },
+      {
+        "time": "10:08",
+        "event": "SESSION_STARTED",
+        "detail": ""
+      },
+      {
+        "time": "10:08",
+        "event": "SESSION_LOCKED_OUT",
+        "detail": "5 high-force pulls within 20 s"
+      }
+    ],
+    "camera": [
+      {
+        "time": "10:07",
+        "event": "HUMAN_DETECTED",
+        "confidence": 0.45
+      },
+      {
+        "time": "10:07",
+        "event": "HUMAN_DETECTED",
+        "confidence": 0.93
+      }
+    ]
+  }
+}

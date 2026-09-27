@@ -1,0 +1,8 @@
+flask>=2.3
+numpy
+scikit-learn>=1.3
+pytest
+# only for make_video.py
+matplotlib
+imageio
+imageio-ffmpeg
